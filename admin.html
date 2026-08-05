@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clemontyne Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --paper:#fcfcfa; --ink:#2a3328; --ink-soft:#5b6b57; --line:#e7e2d3;
+    --leaf:#6fa97d; --leaf-pale:#dcecdf; --citrus:#e8762e; --citrus-deep:#c15f20;
+    --citrus-pale:#fbe0c8; --card:#ffffff;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,'Segoe UI',Inter,sans-serif; }
+  .wrap{ max-width:960px; margin:0 auto; padding:32px; }
+  h1{ font-size:24px; margin:0 0 4px; }
+  h2{ font-size:17px; margin:0 0 14px; }
+  .sub{ color:var(--ink-soft); font-size:13.5px; margin-bottom:28px; }
+
+  /* login */
+  #login-screen{ max-width:360px; margin:80px auto; padding:32px; background:var(--card); border:1px solid var(--line); border-radius:16px; }
+  #login-screen input{ width:100%; padding:10px 12px; margin-bottom:10px; border:1px solid var(--line); border-radius:8px; font-size:14px; }
+  #login-screen button, .btn{
+    background:var(--citrus); color:#fff; border:none; padding:10px 18px; border-radius:8px;
+    font-weight:600; font-size:13.5px; cursor:pointer;
+  }
+  .btn.secondary{ background:transparent; color:var(--ink); border:1px solid var(--line); }
+  .btn.danger{ background:#c15f3a; }
+  #login-error{ color:#b03434; font-size:13px; margin-top:8px; min-height:16px; }
+
+  /* app shell */
+  #app{ display:none; }
+  .topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
+  .tabs{ display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; }
+  .tab{ padding:8px 16px; border-radius:20px; border:1px solid var(--line); background:var(--card); cursor:pointer; font-size:13px; font-weight:600; color:var(--ink-soft); }
+  .tab.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .panel{ display:none; }
+  .panel.active{ display:block; }
+
+  .field-group{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-bottom:12px; }
+  .field-group label{ font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft); font-weight:700; display:block; margin-bottom:4px; }
+  .field-group input, .field-group textarea{
+    width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:8px; font-size:14px; font-family:inherit; margin-bottom:10px;
+  }
+  .field-group textarea{ min-height:60px; resize:vertical; }
+  .field-row{ display:flex; gap:10px; }
+  .field-row > div{ flex:1; }
+  .save-row{ display:flex; justify-content:flex-end; gap:8px; }
+
+  .card-item{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-bottom:12px; }
+  .card-item-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .card-item-head .badge{ font-size:11px; font-weight:700; color:var(--ink-soft); }
+  .group-select{ margin-bottom:20px; }
+  .group-select select{ padding:8px 12px; border-radius:8px; border:1px solid var(--line); font-size:14px; }
+  .add-card-btn{ margin-bottom:20px; }
+  .hint{ font-size:12px; color:var(--ink-soft); margin-bottom:16px; }
+  .thumb{ width:60px; height:60px; object-fit:cover; border-radius:8px; border:1px solid var(--line); margin-bottom:8px; }
+  .checkbox-row{ display:flex; align-items:center; gap:6px; margin-bottom:10px; font-size:13.5px; color:var(--ink-soft); }
+  .status{ font-size:12.5px; color:var(--leaf); min-height:16px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <h1>Clemontyne Admin</h1>
+  <p class="sub">Sign in to edit the site.</p>
+  <input id="login-email" type="email" placeholder="Email">
+  <input id="login-password" type="password" placeholder="Password">
+  <button onclick="doLogin()">Sign in</button>
+  <div id="login-error"></div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <h1>Clemontyne Admin</h1>
+        <p class="sub" style="margin:0;">Signed in as <span id="user-email"></span></p>
+      </div>
+      <button class="btn secondary" onclick="doLogout()">Sign out</button>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="text">Site Text</div>
+      <div class="tab" data-tab="cards">Sections & Cards</div>
+      <div class="tab" data-tab="images">Images</div>
+    </div>
+
+    <!-- SITE TEXT PANEL -->
+    <div class="panel active" id="panel-text">
+      <p class="hint">Headlines, intros, and standalone copy across the site. Changes appear on the live site as soon as you save.</p>
+      <div id="text-fields"></div>
+    </div>
+
+    <!-- CARDS PANEL -->
+    <div class="panel" id="panel-cards">
+      <p class="hint">Everything repeatable — the three client types, pricing tiers, case studies, and more — lives here. Pick a section below.</p>
+      <div class="group-select">
+        <select id="group-picker" onchange="loadCards()">
+          <option value="who_we_build_for">Who We Build For</option>
+          <option value="how_it_works">How It Works</option>
+          <option value="services_systems">Services (CRM / Website systems)</option>
+          <option value="automation_types">Automation Types</option>
+          <option value="pricing_crm">Pricing — CRM tiers</option>
+          <option value="pricing_website">Pricing — Website tiers</option>
+          <option value="pricing_extras">Pricing — Bundle/Retainer strips</option>
+          <option value="work">Work / Case Studies</option>
+        </select>
+      </div>
+      <button class="btn add-card-btn" onclick="addCard()">+ Add new item to this section</button>
+      <div id="card-list"></div>
+    </div>
+
+    <!-- IMAGES PANEL -->
+    <div class="panel" id="panel-images">
+      <p class="hint">Upload an image, then copy its link into the "Image URL" field on a case study card (under Sections & Cards → Work / Case Studies).</p>
+      <input type="file" id="image-upload" accept="image/*">
+      <div id="upload-status" class="status"></div>
+      <div id="image-list" style="margin-top:20px;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---- CONFIGURE THESE TWO VALUES ----
+  // Find them in Supabase: Project Settings → API
+  const SUPABASE_URL = "https://zltwnysydqzvxcuhkhmu.supabase.co/rest/v1/";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpsdHdueXN5ZHF6dnhjdWhraG11Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5NTY5NjgsImV4cCI6MjEwMTUzMjk2OH0.uctNLPxGfEscLq2PTnPZ1RL3GmTJtu7INXGx8s3rrR4";
+  // -------------------------------------
+
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const TEXT_FIELDS = [
+    ["hero_eyebrow","Hero — eyebrow"],["hero_title","Hero — title"],["hero_lede","Hero — subtitle"],
+    ["who_eyebrow","Who We Build For — eyebrow"],["who_title","Who We Build For — title"],
+    ["how_eyebrow","How It Works — eyebrow"],["how_title","How It Works — title"],
+    ["band1_title","CTA band 1 — title"],["band1_body","CTA band 1 — body"],
+    ["services_eyebrow","Services — eyebrow"],["services_title","Services — title"],
+    ["automation_eyebrow","Automation — eyebrow"],["automation_title","Automation — title"],
+    ["pricing_eyebrow","Pricing (CRM) — eyebrow"],["pricing_title","Pricing (CRM) — title"],
+    ["pricing_website_eyebrow","Pricing (Website) — eyebrow"],["pricing_website_title","Pricing (Website) — title"],
+    ["save_eyebrow","Ways to Save — eyebrow"],["save_title","Ways to Save — title"],
+    ["band2_title","CTA band 2 — title"],["band2_body","CTA band 2 — body"],
+    ["work_eyebrow","Work — eyebrow"],["work_title","Work — title"],
+    ["soon_eyebrow","Coming Soon — eyebrow"],["soon_title","Coming Soon — title"],["soon_body","Coming Soon — body"],
+    ["contact_eyebrow","Contact — eyebrow"],["contact_title","Contact — title"],["contact_body","Contact — body"],
+    ["contact_card_title","Contact card — title"],["contact_card_body","Contact card — body"],
+    ["contact_email","Contact — email address"],["contact_meta","Contact — location line"],
+    ["footer_text","Footer text"],
+  ];
+
+  // ---------- AUTH ----------
+  async function doLogin(){
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    if(error){ document.getElementById('login-error').textContent = error.message; return; }
+    showApp(data.user);
+  }
+  async function doLogout(){
+    await sb.auth.signOut();
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'block';
+  }
+  function showApp(user){
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('user-email').textContent = user.email;
+    loadTextFields();
+    loadCards();
+    loadImages();
+  }
+  // restore session on reload
+  sb.auth.getSession().then(({data}) => { if(data.session) showApp(data.session.user); });
+
+  // ---------- TABS ----------
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ---------- SITE TEXT ----------
+  async function loadTextFields(){
+    const { data } = await sb.from('site_text').select('*');
+    const map = {};
+    (data || []).forEach(row => map[row.key] = row.value);
+
+    const container = document.getElementById('text-fields');
+    container.innerHTML = '';
+    TEXT_FIELDS.forEach(([key, label]) => {
+      const div = document.createElement('div');
+      div.className = 'field-group';
+      const isLong = (map[key] || '').length > 70;
+      div.innerHTML = `
+        <label>${label}</label>
+        ${isLong ? `<textarea id="text-${key}">${map[key]||''}</textarea>` : `<input id="text-${key}" value="${(map[key]||'').replace(/"/g,'&quot;')}">`}
+        <div class="save-row"><button class="btn" onclick="saveText('${key}')">Save</button></div>
+      `;
+      container.appendChild(div);
+    });
+  }
+  async function saveText(key){
+    const value = document.getElementById('text-' + key).value;
+    await sb.from('site_text').upsert({ key, value });
+  }
+
+  // ---------- CARDS ----------
+  async function loadCards(){
+    const group = document.getElementById('group-picker').value;
+    const { data } = await sb.from('cards').select('*').eq('group_key', group).order('sort_order');
+    const list = document.getElementById('card-list');
+    list.innerHTML = '';
+    (data || []).forEach(card => list.appendChild(renderCardEditor(card, group)));
+  }
+
+  function renderCardEditor(card, group){
+    const div = document.createElement('div');
+    div.className = 'card-item';
+    const isPricing = group.startsWith('pricing_') && group !== 'pricing_extras';
+    const isExtras = group === 'pricing_extras';
+    const isWork = group === 'work';
+    const featuresStr = (card.features || []).join('\n');
+
+    div.innerHTML = `
+      <div class="card-item-head">
+        <span class="badge">Order: <input type="number" value="${card.sort_order}" style="width:50px;" id="order-${card.id}"></span>
+        <button class="btn danger" onclick="deleteCard('${card.id}')">Delete</button>
+      </div>
+      ${!isPricing ? `<label>Tag / label</label><input id="tag-${card.id}" value="${(card.tag||'').replace(/"/g,'&quot;')}">` : ''}
+      <label>Title</label><input id="title-${card.id}" value="${(card.title||'').replace(/"/g,'&quot;')}">
+      ${!isPricing && !isExtras ? `<label>Body</label><textarea id="body-${card.id}">${card.body||''}</textarea>` : ''}
+      ${isExtras ? `<label>Description</label><textarea id="body-${card.id}">${card.body||''}</textarea>` : ''}
+      ${(isPricing || isExtras) ? `<label>${isPricing ? 'Price (e.g. $1,500)' : 'Amount (e.g. 10% off the pair)'}</label><input id="amount-${card.id}" value="${(card.amount||'').replace(/"/g,'&quot;')}">` : ''}
+      ${isPricing ? `<label>Features (one per line)</label><textarea id="features-${card.id}">${featuresStr}</textarea>
+        <div class="checkbox-row"><input type="checkbox" id="featured-${card.id}" ${card.featured?'checked':''}> Mark as "Most chosen"</div>` : ''}
+      ${isWork ? `<label>Image URL (optional — leave blank to use the default color block)</label><input id="image-${card.id}" value="${(card.image_url||'').replace(/"/g,'&quot;')}">` : ''}
+      <div class="checkbox-row"><input type="checkbox" id="visible-${card.id}" ${card.visible?'checked':''}> Visible on live site</div>
+      <div class="save-row"><button class="btn" onclick="saveCard('${card.id}','${group}')">Save</button></div>
+    `;
+    return div;
+  }
+
+  async function saveCard(id, group){
+    const isPricing = group.startsWith('pricing_') && group !== 'pricing_extras';
+
+    const update = {
+      title: document.getElementById('title-' + id).value,
+      sort_order: parseInt(document.getElementById('order-' + id).value) || 0,
+      visible: document.getElementById('visible-' + id).checked,
+    };
+    const tagEl = document.getElementById('tag-' + id);
+    if(tagEl) update.tag = tagEl.value;
+    const bodyEl = document.getElementById('body-' + id);
+    if(bodyEl) update.body = bodyEl.value;
+    const amountEl = document.getElementById('amount-' + id);
+    if(amountEl) update.amount = amountEl.value;
+    const imageEl = document.getElementById('image-' + id);
+    if(imageEl) update.image_url = imageEl.value;
+    if(isPricing){
+      const featEl = document.getElementById('features-' + id);
+      update.features = featEl.value.split('\n').map(s => s.trim()).filter(Boolean);
+      update.featured = document.getElementById('featured-' + id).checked;
+    }
+    await sb.from('cards').update(update).eq('id', id);
+    loadCards();
+  }
+
+  async function addCard(){
+    const group = document.getElementById('group-picker').value;
+    await sb.from('cards').insert({ group_key: group, title: 'New item', sort_order: 99 });
+    loadCards();
+  }
+
+  async function deleteCard(id){
+    if(!confirm('Delete this item? This can\'t be undone.')) return;
+    await sb.from('cards').delete().eq('id', id);
+    loadCards();
+  }
+
+  // ---------- IMAGES ----------
+  document.getElementById('image-upload').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const status = document.getElementById('upload-status');
+    status.textContent = 'Uploading…';
+    const path = `${Date.now()}-${file.name}`;
+    const { error } = await sb.storage.from('site-images').upload(path, file);
+    if(error){ status.textContent = 'Error: ' + error.message; return; }
+    status.textContent = 'Uploaded!';
+    loadImages();
+  });
+
+  async function loadImages(){
+    const { data } = await sb.storage.from('site-images').list();
+    const list = document.getElementById('image-list');
+    list.innerHTML = '';
+    (data || []).forEach(file => {
+      const { data: urlData } = sb.storage.from('site-images').getPublicUrl(file.name);
+      const div = document.createElement('div');
+      div.className = 'field-group';
+      div.innerHTML = `
+        <img class="thumb" src="${urlData.publicUrl}">
+        <div style="font-size:12.5px; word-break:break-all; color:var(--ink-soft); margin-bottom:6px;">${urlData.publicUrl}</div>
+        <button class="btn secondary" onclick="navigator.clipboard.writeText('${urlData.publicUrl}')">Copy link</button>
+      `;
+      list.appendChild(div);
+    });
+  }
+</script>
+
+</body>
+</html>
