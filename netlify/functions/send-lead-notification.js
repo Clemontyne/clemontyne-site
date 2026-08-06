@@ -38,7 +38,7 @@ exports.handler = async (event) => {
     body: JSON.stringify({
       // Must be an address on a domain verified in Resend.
       from: 'Clemontyne Leads <leads@clemontyne.com>',
-      to: ['courtney@clemontyne.com', 'hello@clemontyne.com'], 'brandon@clemontyne.com'],
+      to: ['courtney@clemontyne.com', 'brandon@clemontyne.com', 'hello@clemontyne.com'],
       subject: `New lead: ${lead.business_name || lead.contact_name || 'Website submission'}`,
       html: emailHtml,
     }),
