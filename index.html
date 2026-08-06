@@ -10,28 +10,22 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap');
-
 :root{
-  --paper:      #fcfcfa;
-  --ink:        #2a3328;
-  --ink-soft:   #5b6b57;
-  --line:       #e7e2d3;
-
-  --leaf:       #6fa97d;
-  --leaf-deep:  #467356;
-  --leaf-pale:  #dcecdf;
-
-  --citrus:     #e8762e;
-  --citrus-deep:#c15f20;
-  --citrus-pale:#fbe0c8;
-
-  --zest:       #f0d477;
-  --zest-pale:  #faf1d3;
-
-  --card:       #ffffff;
-  --shadow:     0 12px 32px rgba(42,51,40,0.07);
+--paper: #fcfcfa;
+--ink: #2a3328;
+--ink-soft: #5b6b57;
+--line: #e7e2d3;
+--leaf: #6fa97d;
+--leaf-deep: #467356;
+--leaf-pale: #dcecdf;
+--citrus: #e8762e;
+--citrus-deep:#c15f20;
+--citrus-pale:#fbe0c8;
+--zest: #f0d477;
+--zest-pale: #faf1d3;
+--card: #ffffff;
+--shadow: 0 12px 32px rgba(42,51,40,0.07);
 }
-
 *{ box-sizing:border-box; }
 html{ scroll-behavior:smooth; }
 body{ margin:0; background:var(--paper); color:var(--ink); font-family:'Inter',sans-serif; font-size:16px; line-height:1.6; }
@@ -39,45 +33,39 @@ h1,h2,h3,h4{ font-family:'Fraunces',serif; font-weight:600; line-height:1.15; ma
 p{ margin:0; color:var(--ink-soft); }
 a{ color:inherit; text-decoration:none; }
 img,svg{ display:block; max-width:100%; }
-
 .wrap{ max-width:1120px; margin:0 auto; padding:0 32px; }
-
 .nav{ display:flex; align-items:center; justify-content:space-between; padding:22px 0; border-bottom:1px solid var(--line);
-      position:sticky; top:0; background:var(--paper); z-index:10; }
+position:sticky; top:0; background:var(--paper); z-index:10; }
 .nav .wrap{ display:flex; align-items:center; justify-content:space-between; width:100%; }
 .brand{ display:flex; align-items:center; gap:10px; }
 .brand-mark{ position:relative; width:32px; height:32px; border-radius:50%; flex-shrink:0;
-  background:conic-gradient(var(--citrus) 0deg 90deg, var(--leaf) 90deg 180deg, var(--zest) 180deg 270deg, var(--citrus-pale) 270deg 360deg);
-  border:2px solid var(--citrus-pale); box-shadow:inset 0 0 0 1px rgba(255,255,255,.5); }
+background:conic-gradient(var(--citrus) 0deg 90deg, var(--leaf) 90deg 180deg, var(--zest) 180deg 270deg, var(--citrus-pale) 270deg 360deg);
+border:2px solid var(--citrus-pale); box-shadow:inset 0 0 0 1px rgba(255,255,255,.5); }
 .brand-mark::before{ content:''; position:absolute; inset:0; border-radius:50%;
-  background:repeating-conic-gradient(from 0deg, transparent 0deg 27deg, rgba(255,255,255,.85) 27deg 30deg); }
+background:repeating-conic-gradient(from 0deg, transparent 0deg 27deg, rgba(255,255,255,.85) 27deg 30deg); }
 .brand-mark::after{ content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  width:26%; height:26%; border-radius:50%; background:#fdf8ef; }
+width:26%; height:26%; border-radius:50%; background:#fdf8ef; }
 .brand-name{ font-family:'Fraunces',serif; font-weight:600; font-size:19px; }
 .nav-links{ display:flex; align-items:center; gap:30px; font-size:14.5px; font-weight:500; color:var(--ink-soft); }
 .nav-links a:hover{ color:var(--citrus-deep); }
 .btn{ display:inline-flex; align-items:center; gap:6px; background:var(--citrus); color:#fff; padding:11px 22px; border-radius:10px;
-  font-size:14.5px; font-weight:700; border:none; cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s ease, transform .15s ease; }
+font-size:14.5px; font-weight:700; border:none; cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s ease, transform .15s ease; }
 .btn:hover{ background:var(--citrus-deep); transform:translateY(-1px); }
 .btn-ghost{ background:transparent; color:var(--ink); border:1.5px solid var(--line); }
 .btn-ghost:hover{ background:var(--leaf-pale); border-color:var(--leaf); }
-
 .hero{ padding:76px 0 40px; scroll-margin-top:90px; }
 .eyebrow{ display:inline-block; font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--citrus-deep); margin-bottom:16px; }
 .hero h1{ font-size:46px; max-width:680px; margin-bottom:20px; }
 .hero .lede{ font-size:18px; max-width:560px; margin-bottom:32px; }
 .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
 .peel-divider{ width:100%; height:64px; display:block; margin-top:40px; }
-
 .section{ padding:56px 0; scroll-margin-top:90px; }
 .section.tight{ padding:36px 0; }
 .section-head{ max-width:600px; margin-bottom:36px; }
 .section-head .eyebrow{ margin-bottom:10px; }
 .section-head h2{ font-size:30px; margin-bottom:12px; }
-
 .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
 .grid-2{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
-
 .card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:26px 24px; box-shadow:var(--shadow); }
 .card h3{ font-size:18px; margin-bottom:10px; }
 .card p{ font-size:14.5px; }
@@ -85,541 +73,555 @@ img,svg{ display:block; max-width:100%; }
 .tag.leaf{ background:var(--leaf-pale); color:var(--leaf-deep); }
 .tag.citrus{ background:var(--citrus-pale); color:var(--citrus-deep); }
 .tag.zest{ background:var(--zest-pale); color:#8a7422; }
-
 .band{ background:var(--ink); color:var(--paper); border-radius:20px; padding:42px 40px;
-  display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; }
+display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; }
 .band h3{ color:var(--paper); font-size:24px; margin-bottom:8px; }
 .band p{ color:#c9d3c6; max-width:460px; }
 .band .btn{ background:var(--zest); color:#4a3f10; }
 .band .btn:hover{ background:#e6c95e; }
-
 .price-card{ background:var(--card); border:1px solid var(--line); border-radius:18px; padding:28px 24px; display:flex; flex-direction:column; gap:14px; }
 .price-card.featured{ border:2px solid var(--citrus); position:relative; }
 .price-card.featured::before{ content:"Most chosen"; position:absolute; top:-12px; left:24px; background:var(--citrus); color:#fff;
-  font-size:11px; font-weight:700; padding:4px 12px; border-radius:20px; letter-spacing:.03em; }
+font-size:11px; font-weight:700; padding:4px 12px; border-radius:20px; letter-spacing:.03em; }
 .price-name{ font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); }
 .price-value{ font-family:'Fraunces',serif; font-size:36px; }
 .price-list{ list-style:none; padding:0; margin:0; font-size:14px; color:var(--ink-soft); display:flex; flex-direction:column; gap:8px; }
 .price-list li::before{ content:"— "; color:var(--leaf-deep); font-weight:700; }
-
 .strip{ display:flex; justify-content:space-between; align-items:center; padding:18px 22px; border:1px solid var(--line); border-radius:14px;
-  background:var(--card); margin-bottom:12px; flex-wrap:wrap; gap:10px; }
+background:var(--card); margin-bottom:12px; flex-wrap:wrap; gap:10px; }
 .strip h4{ font-size:15.5px; }
 .strip p{ font-size:13.5px; }
 .strip .amount{ font-family:'Fraunces',serif; font-size:20px; color:var(--citrus-deep); white-space:nowrap; }
-
 .case-card{ background:var(--card); border:1px solid var(--line); border-radius:18px; padding:30px 28px;
-  display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:center; margin-bottom:20px; }
+display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:center; margin-bottom:20px; }
 .case-visual{ background:var(--leaf-pale); border-radius:14px; height:180px; display:flex; align-items:center; justify-content:center;
-  color:var(--leaf-deep); font-family:'Fraunces',serif; font-size:15px; text-align:center; padding:20px; overflow:hidden; }
+color:var(--leaf-deep); font-family:'Fraunces',serif; font-size:15px; text-align:center; padding:20px; overflow:hidden; }
 .case-visual img{ width:100%; height:100%; object-fit:cover; border-radius:14px; }
 .case-visual.alt{ background:var(--citrus-pale); color:var(--citrus-deep); }
 .case-card{ cursor:pointer; transition:transform .15s ease, box-shadow .15s ease; }
 .case-card:hover{ transform:translateY(-2px); box-shadow:0 16px 36px rgba(42,51,40,0.1); }
 .case-card .open-hint{ font-size:12.5px; color:var(--citrus-deep); font-weight:600; margin-top:10px; display:inline-block; }
-
 .modal-overlay{ position:fixed; inset:0; background:rgba(42,51,40,0.55); display:none; align-items:flex-start; justify-content:center;
-  padding:40px 20px; z-index:100; overflow-y:auto; }
+padding:40px 20px; z-index:100; overflow-y:auto; }
 .modal-overlay.open{ display:flex; }
 .modal-box{ background:var(--paper); border-radius:20px; max-width:760px; width:100%; padding:0; overflow:hidden; margin-bottom:40px; }
 .modal-gallery{ position:relative; background:var(--ink); height:360px; display:flex; align-items:center; justify-content:center; }
 .modal-gallery img{ width:100%; height:100%; object-fit:cover; }
 .modal-gallery .empty{ color:#c9d3c6; font-family:'Fraunces',serif; }
 .modal-nav{ position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.9); border:none;
-  width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:16px; font-weight:700; color:var(--ink); }
+width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:16px; font-weight:700; color:var(--ink); }
 .modal-nav.prev{ left:14px; } .modal-nav.next{ right:14px; }
 .modal-dots{ position:absolute; bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:6px; }
 .modal-dots span{ width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.5); }
 .modal-dots span.active{ background:#fff; }
 .modal-close{ position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.9); border:none; width:32px; height:32px;
-  border-radius:50%; cursor:pointer; font-size:16px; font-weight:700; z-index:2; }
+border-radius:50%; cursor:pointer; font-size:16px; font-weight:700; z-index:2; }
 .modal-body{ padding:32px 36px 36px; }
 .modal-body h3{ font-size:24px; margin-bottom:18px; }
 .modal-section{ margin-bottom:18px; }
 .modal-section h4{ font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--citrus-deep); font-weight:700; margin-bottom:6px; }
 .modal-section p{ font-size:14.5px; color:var(--ink-soft); }
-
 .footer{ border-top:1px solid var(--line); padding:36px 0; margin-top:40px; }
 .footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
 .footer p{ font-size:13px; }
-
 .contact-card{ background:var(--card); border:1px solid var(--line); border-radius:20px; padding:40px; text-align:center; max-width:560px; margin:0 auto; }
 .contact-card h2{ font-size:26px; margin-bottom:10px; }
 .contact-card p{ margin-bottom:26px; }
 .contact-email{ display:inline-block; font-family:'Fraunces',serif; font-size:20px; color:var(--citrus-deep);
-  border-bottom:2px solid var(--citrus-pale); padding-bottom:4px; margin-bottom:26px; }
+border-bottom:2px solid var(--citrus-pale); padding-bottom:4px; margin-bottom:26px; }
 .contact-meta{ font-size:13px; color:var(--ink-soft); margin-top:18px; }
-
 .skeleton{ opacity:0.35; }
-
 .bg-watermark{
-  position:fixed;
-  top:50%; left:50%;
-  transform:translate(-50%,-46%);
-  width:1100px; height:1100px;
-  opacity:0.05;
-  z-index:0;
-  pointer-events:none;
+position:fixed;
+top:50%; left:50%;
+transform:translate(-50%,-46%);
+width:1100px; height:1100px;
+opacity:0.05;
+z-index:0;
+pointer-events:none;
 }
 .bg-watermark svg{ width:100%; height:100%; }
 .nav, .section, .hero, .footer{ position:relative; z-index:1; }
-
 @media (max-width:860px){
-  .nav-links{ display:none; }
-  .hero h1{ font-size:34px; }
-  .grid-3{ grid-template-columns:1fr; }
-  .grid-2{ grid-template-columns:1fr; }
-  .case-card{ grid-template-columns:1fr; }
-  .band{ flex-direction:column; align-items:flex-start; }
+.nav-links{ display:none; }
+.hero h1{ font-size:34px; }
+.grid-3{ grid-template-columns:1fr; }
+.grid-2{ grid-template-columns:1fr; }
+.case-card{ grid-template-columns:1fr; }
+.band{ flex-direction:column; align-items:flex-start; }
 }
 </style>
 </head>
 <body>
-
 <div class="bg-watermark" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-    <defs>
-      <clipPath id="wmClip"><circle cx="32" cy="32" r="29"/></clipPath>
-    </defs>
-    <circle cx="32" cy="32" r="30.5" fill="#fbe0c8"/>
-    <g clip-path="url(#wmClip)">
-      <path d="M32,32 L32,3 A29,29 0 0,1 61,32 Z" fill="#e8762e"/>
-      <path d="M32,32 L61,32 A29,29 0 0,1 32,61 Z" fill="#6fa97d"/>
-      <path d="M32,32 L32,61 A29,29 0 0,1 3,32 Z" fill="#f0d477"/>
-      <path d="M32,32 L3,32 A29,29 0 0,1 32,3 Z" fill="#fbe0c8"/>
-      <g stroke="#ffffff" stroke-width="1.4" opacity="0.85">
-        <line x1="32" y1="32" x2="32" y2="3"/>
-        <line x1="32" y1="32" x2="47.4" y2="6.9"/>
-        <line x1="32" y1="32" x2="57.1" y2="17.6"/>
-        <line x1="32" y1="32" x2="61" y2="32"/>
-        <line x1="32" y1="32" x2="57.1" y2="46.4"/>
-        <line x1="32" y1="32" x2="47.4" y2="57.1"/>
-        <line x1="32" y1="32" x2="32" y2="61"/>
-        <line x1="32" y1="32" x2="16.6" y2="57.1"/>
-        <line x1="32" y1="32" x2="6.9" y2="46.4"/>
-        <line x1="32" y1="32" x2="3" y2="32"/>
-        <line x1="32" y1="32" x2="6.9" y2="17.6"/>
-        <line x1="32" y1="32" x2="16.6" y2="6.9"/>
-      </g>
-    </g>
-    <circle cx="32" cy="32" r="29" fill="none" stroke="#fbe0c8" stroke-width="2.4"/>
-    <circle cx="32" cy="32" r="8" fill="#fdf8ef"/>
-  </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<defs>
+<clipPath id="wmClip"><circle cx="32" cy="32" r="29"/></clipPath>
+</defs>
+<circle cx="32" cy="32" r="30.5" fill="#fbe0c8"/>
+<g clip-path="url(#wmClip)">
+<path d="M32,32 L32,3 A29,29 0 0,1 61,32 Z" fill="#e8762e"/>
+<path d="M32,32 L61,32 A29,29 0 0,1 32,61 Z" fill="#6fa97d"/>
+<path d="M32,32 L32,61 A29,29 0 0,1 3,32 Z" fill="#f0d477"/>
+<path d="M32,32 L3,32 A29,29 0 0,1 32,3 Z" fill="#fbe0c8"/>
+<g stroke="#ffffff" stroke-width="1.4" opacity="0.85">
+<line x1="32" y1="32" x2="32" y2="3"/>
+<line x1="32" y1="32" x2="47.4" y2="6.9"/>
+<line x1="32" y1="32" x2="57.1" y2="17.6"/>
+<line x1="32" y1="32" x2="61" y2="32"/>
+<line x1="32" y1="32" x2="57.1" y2="46.4"/>
+<line x1="32" y1="32" x2="47.4" y2="57.1"/>
+<line x1="32" y1="32" x2="32" y2="61"/>
+<line x1="32" y1="32" x2="16.6" y2="57.1"/>
+<line x1="32" y1="32" x2="6.9" y2="46.4"/>
+<line x1="32" y1="32" x2="3" y2="32"/>
+<line x1="32" y1="32" x2="6.9" y2="17.6"/>
+<line x1="32" y1="32" x2="16.6" y2="6.9"/>
+</g>
+</g>
+<circle cx="32" cy="32" r="29" fill="none" stroke="#fbe0c8" stroke-width="2.4"/>
+<circle cx="32" cy="32" r="8" fill="#fdf8ef"/>
+</svg>
 </div>
-
 <nav class="nav">
-  <div class="wrap">
-    <a class="brand" href="#home">
-      <div class="brand-mark"></div>
-      <div class="brand-name">Clemontyne</div>
-    </a>
-    <div class="nav-links">
-      <a href="#home">Home</a>
-      <a href="#services">Services</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#work">Work</a>
-      <a href="#contact">Contact</a>
-    </div>
-    <a class="btn" href="#contact">Book a call</a>
-  </div>
+<div class="wrap">
+<a class="brand" href="#home">
+<div class="brand-mark"></div>
+<div class="brand-name">Clemontyne</div>
+</a>
+<div class="nav-links">
+<a href="#home">Home</a>
+<a href="#services">Services</a>
+<a href="#pricing">Pricing</a>
+<a href="#work">Work</a>
+<a href="#contact">Contact</a>
+</div>
+<a class="btn" href="#contact">Book a call</a>
+</div>
 </nav>
 
 <!-- HOME -->
 <header class="hero" id="home">
-  <div class="wrap">
-    <div class="eyebrow" id="t-hero_eyebrow"></div>
-    <h1 id="t-hero_title"></h1>
-    <p class="lede" id="t-hero_lede"></p>
-    <div class="hero-actions">
-      <a class="btn" href="#contact">Book a free consult</a>
-      <a class="btn btn-ghost" href="#work">See our work</a>
-    </div>
-  </div>
-  <svg class="peel-divider" viewBox="0 0 1120 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,32 C180,64 300,0 560,20 C820,40 940,0 1120,32 L1120,64 L0,64 Z" fill="#dcecdf"/>
-  </svg>
+<div class="wrap">
+<div class="eyebrow" id="t-hero_eyebrow"></div>
+<h1 id="t-hero_title"></h1>
+<p class="lede" id="t-hero_lede"></p>
+<div class="hero-actions">
+<a class="btn" href="#contact">Book a free consult</a>
+<a class="btn btn-ghost" href="#work">See our work</a>
+</div>
+</div>
+<svg class="peel-divider" viewBox="0 0 1120 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0,32 C180,64 300,0 560,20 C820,40 940,0 1120,32 L1120,64 L0,64 Z" fill="#dcecdf"/>
+</svg>
 </header>
 
 <section class="section" style="background:var(--leaf-pale); border-radius:0;">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow" id="t-who_eyebrow"></div>
-      <h2 id="t-who_title"></h2>
-    </div>
-    <div class="grid-3" id="cards-who_we_build_for"></div>
-  </div>
+<div class="wrap">
+<div class="section-head">
+<div class="eyebrow" id="t-who_eyebrow"></div>
+<h2 id="t-who_title"></h2>
+</div>
+<div class="grid-3" id="cards-who_we_build_for"></div>
+</div>
 </section>
 
 <section class="section">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow" id="t-how_eyebrow"></div>
-      <h2 id="t-how_title"></h2>
-    </div>
-    <div class="grid-3" id="cards-how_it_works"></div>
-  </div>
+<div class="wrap">
+<div class="section-head">
+<div class="eyebrow" id="t-how_eyebrow"></div>
+<h2 id="t-how_title"></h2>
+</div>
+<div class="grid-3" id="cards-how_it_works"></div>
+</div>
 </section>
 
 <section class="section tight">
-  <div class="wrap">
-    <div class="band">
-      <div>
-        <h3 id="t-band1_title"></h3>
-        <p id="t-band1_body"></p>
-      </div>
-      <a class="btn" href="#contact">Book a free consult</a>
-    </div>
-  </div>
+<div class="wrap">
+<div class="band">
+<div>
+<h3 id="t-band1_title"></h3>
+<p id="t-band1_body"></p>
+</div>
+<a class="btn" href="#contact">Book a free consult</a>
+</div>
+</div>
 </section>
 
 <!-- SERVICES -->
 <section class="section" id="services">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow" id="t-services_eyebrow"></div>
-      <h2 id="t-services_title"></h2>
-    </div>
-    <div class="grid-2" id="cards-services_systems"></div>
-  </div>
+<div class="wrap">
+<div class="section-head">
+<div class="eyebrow" id="t-services_eyebrow"></div>
+<h2 id="t-services_title"></h2>
+</div>
+<div class="grid-2" id="cards-services_systems"></div>
+</div>
 </section>
 
 <section class="section" style="background:var(--zest-pale); border-radius:0;">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow" id="t-automation_eyebrow"></div>
-      <h2 id="t-automation_title"></h2>
-    </div>
-    <div class="grid-3" id="cards-automation_types"></div>
-  </div>
+<div class="wrap">
+<div class="section-head">
+<div class="eyebrow" id="t-automation_eyebrow"></div>
+<h2 id="t-automation_title"></h2>
+</div>
+<div class="grid-3" id="cards-automation_types"></div>
+</div>
 </section>
 
 <!-- PRICING -->
 <section class="section" id="pricing">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow" id="t-pricing_eyebrow"></div>
-      <h2 id="t-pricing_title"></h2>
-    </div>
-    <div class="grid-3" id="cards-pricing_crm"></div>
-  </div>
+<div class="wrap">
+<div class="section-head">
+<div class="eyebrow" id="t-pricing_eyebrow"></div>
+<h2 id="t-pricing_title"></h2>
+</div>
+<div class="grid-3" id="cards-pricing_crm"></div>
+</div>
 </section>
 
 <section class="section" style="background:var(--leaf-pale); border-radius:0;">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow" id="t-pricing_website_eyebrow"></div>
-      <h2 id="t-pricing_website_title"></h2>
-    </div>
-    <div class="grid-3" id="cards-pricing_website"></div>
-  </div>
+<div class="wrap">
+<div class="section-head">
+<div class="eyebrow" id="t-pricing_website_eyebrow"></div>
+<h2 id="t-pricing_website_title"></h2>
+</div>
+<div class="grid-3" id="cards-pricing_website"></div>
+</div>
 </section>
 
 <section class="section">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow" id="t-save_eyebrow"></div>
-      <h2 id="t-save_title"></h2>
-    </div>
-    <div id="cards-pricing_extras"></div>
-  </div>
+<div class="wrap">
+<div class="section-head">
+<div class="eyebrow" id="t-save_eyebrow"></div>
+<h2 id="t-save_title"></h2>
+</div>
+<div id="cards-pricing_extras"></div>
+</div>
 </section>
 
 <section class="section tight">
-  <div class="wrap">
-    <div class="band">
-      <div>
-        <h3 id="t-band2_title"></h3>
-        <p id="t-band2_body"></p>
-      </div>
-      <a class="btn" href="#contact">Book a free consult</a>
-    </div>
-  </div>
+<div class="wrap">
+<div class="band">
+<div>
+<h3 id="t-band2_title"></h3>
+<p id="t-band2_body"></p>
+</div>
+<a class="btn" href="#contact">Book a free consult</a>
+</div>
+</div>
 </section>
 
 <!-- WORK -->
 <section class="section" id="work">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow" id="t-work_eyebrow"></div>
-      <h2 id="t-work_title"></h2>
-    </div>
-    <div id="cards-work"></div>
-  </div>
+<div class="wrap">
+<div class="section-head">
+<div class="eyebrow" id="t-work_eyebrow"></div>
+<h2 id="t-work_title"></h2>
+</div>
+<div id="cards-work"></div>
+</div>
 </section>
 
 <section class="section" style="background:var(--zest-pale); border-radius:0;">
-  <div class="wrap" style="text-align:center;">
-    <div class="eyebrow" id="t-soon_eyebrow" style="justify-content:center;"></div>
-    <h2 id="t-soon_title" style="margin-bottom:12px;"></h2>
-    <p id="t-soon_body" style="max-width:520px; margin:0 auto 24px;"></p>
-    <a class="btn" href="#contact">Get in touch</a>
-  </div>
+<div class="wrap" style="text-align:center;">
+<div class="eyebrow" id="t-soon_eyebrow" style="justify-content:center;"></div>
+<h2 id="t-soon_title" style="margin-bottom:12px;"></h2>
+<p id="t-soon_body" style="max-width:520px; margin:0 auto 24px;"></p>
+<a class="btn" href="#contact">Get in touch</a>
+</div>
 </section>
 
 <!-- CONTACT -->
 <section class="section" id="contact">
-  <div class="wrap">
-    <div class="section-head" style="margin:0 auto 36px; text-align:center; max-width:560px;">
-      <div class="eyebrow" id="t-contact_eyebrow" style="justify-content:center;"></div>
-      <h2 id="t-contact_title"></h2>
-      <p id="t-contact_body" style="margin-top:12px;"></p>
-    </div>
-    <div class="contact-card">
-      <h2 id="t-contact_card_title"></h2>
-      <p id="t-contact_card_body"></p>
-      <a class="contact-email" id="t-contact_email_link" href="#"></a>
-      <div>
-        <a class="btn" id="t-contact_email_btn" href="#">Send us an email</a>
-      </div>
-      <p class="contact-meta" id="t-contact_meta"></p>
-    </div>
-  </div>
+<div class="wrap">
+<div class="section-head" style="margin:0 auto 36px; text-align:center; max-width:560px;">
+<div class="eyebrow" id="t-contact_eyebrow" style="justify-content:center;"></div>
+<h2 id="t-contact_title"></h2>
+<p id="t-contact_body" style="margin-top:12px;"></p>
+</div>
+<div class="contact-card">
+<h2 id="t-contact_card_title"></h2>
+<p id="t-contact_card_body"></p>
+<a class="contact-email" id="t-contact_email_link" href="#"></a>
+<div>
+<a class="btn" id="t-contact_email_btn" href="#">Send us an email</a>
+</div>
+<p class="contact-meta" id="t-contact_meta"></p>
+</div>
+</div>
 </section>
 
 <footer class="footer">
-  <div class="wrap">
-    <div class="brand">
-      <div class="brand-mark"></div>
-      <div class="brand-name">Clemontyne</div>
-    </div>
-    <p id="t-footer_text"></p>
-  </div>
+<div class="wrap">
+<div class="brand">
+<div class="brand-mark"></div>
+<div class="brand-name">Clemontyne</div>
+</div>
+<p id="t-footer_text"></p>
+</div>
 </footer>
 
 <script>
-  // ---- CONFIGURE THESE TWO VALUES (same as admin.html) ----
-  const SUPABASE_URL = "https://zltwnysydqzvxcuhkhmu.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpsdHdueXN5ZHF6dnhjdWhraG11Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5NTY5NjgsImV4cCI6MjEwMTUzMjk2OH0.uctNLPxGfEscLq2PTnPZ1RL3GmTJtu7INXGx8s3rrR4";
-  // -----------------------------------------------------------
+// ---- CONFIGURE THESE TWO VALUES (same as admin.html) ----
+const SUPABASE_URL = "https://zltwnysydqzvxcuhkhmu.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpsdHdueXN5ZHF6dnhjdWhraG11Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5NTY5NjgsImV4cCI6MjEwMTUzMjk2OH0.uctNLPxGfEscLq2PTnPZ1RL3GmTJtu7INXGx8s3rrR4";
+// -----------------------------------------------------------
 
-  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  function setText(id, value){
-    const el = document.getElementById('t-' + id);
-    if(el) el.textContent = value || '';
-  }
+function setText(id, value){
+const el = document.getElementById('t-' + id);
+if(el) el.textContent = value || '';
+}
 
-  async function loadSiteText(){
-    const { data, error } = await sb.from('site_text').select('*');
-    if(error || !data){ console.error('site_text load failed', error); return; }
-    const map = {};
-    data.forEach(row => map[row.key] = row.value);
-    Object.keys(map).forEach(key => setText(key, map[key]));
+async function loadSiteText(){
+const { data, error } = await sb.from('site_text').select('*');
+if(error || !data){ console.error('site_text load failed', error); return; }
+const map = {};
+data.forEach(row => map[row.key] = row.value);
+Object.keys(map).forEach(key => setText(key, map[key]));
 
-    // contact email needs special handling (href + label)
-    const email = map['contact_email'] || 'hello@clemontyne.com';
-    const emailLink = document.getElementById('t-contact_email_link');
-    if(emailLink){ emailLink.textContent = email; emailLink.href = 'mailto:' + email; }
-    const emailBtn = document.getElementById('t-contact_email_btn');
-    if(emailBtn){ emailBtn.href = 'mailto:' + email; }
-  }
+// contact email needs special handling (href + label)
+const email = map['contact_email'] || 'hello@clemontyne.com';
+const emailLink = document.getElementById('t-contact_email_link');
+if(emailLink){ emailLink.textContent = email; emailLink.href = 'mailto:' + email; }
+const emailBtn = document.getElementById('t-contact_email_btn');
+if(emailBtn){ emailBtn.href = 'mailto:' + email; }
+}
 
-  function tagClass(i){
-    return ['citrus','leaf','zest'][i % 3];
-  }
+function tagClass(i){
+return ['citrus','leaf','zest'][i % 3];
+}
 
-  async function loadSimpleCards(group, containerId, tagVariant){
-    const { data, error } = await sb.from('cards').select('*').eq('group_key', group).eq('visible', true).order('sort_order');
-    const container = document.getElementById(containerId);
-    if(error || !container) return;
-    container.innerHTML = '';
-    (data || []).forEach((card, i) => {
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.innerHTML = `
-        ${card.tag ? `<span class="tag ${tagClass(i)}">${card.tag}</span>` : ''}
-        <h3>${card.title || ''}</h3>
-        <p>${card.body || ''}</p>
-      `;
-      container.appendChild(div);
-    });
-  }
+async function loadSimpleCards(group, containerId, tagVariant){
+const { data, error } = await sb.from('cards').select('*').eq('group_key', group).eq('visible', true).order('sort_order');
+const container = document.getElementById(containerId);
+if(error || !container) return;
+container.innerHTML = '';
+(data || []).forEach((card, i) => {
+const div = document.createElement('div');
+div.className = 'card';
+div.innerHTML = `
+${card.tag ? `<span class="tag ${tagClass(i)}">${card.tag}</span>` : ''}
+<h3>${card.title || ''}</h3>
+<p>${card.body || ''}</p>
+`;
+container.appendChild(div);
+});
+}
 
-  async function loadServiceCards(){
-    const { data, error } = await sb.from('cards').select('*').eq('group_key','services_systems').eq('visible', true).order('sort_order');
-    const container = document.getElementById('cards-services_systems');
-    if(error || !container) return;
-    container.innerHTML = '';
-    (data || []).forEach((card, i) => {
-      const featuresHtml = (card.features || []).map(f => `<li>${f}</li>`).join('');
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.innerHTML = `
-        <span class="tag ${tagClass(i)}">${card.tag || ''}</span>
-        <h3>${card.title || ''}</h3>
-        <p>${card.body || ''}</p>
-        <ul class="price-list" style="margin-top:16px;">${featuresHtml}</ul>
-      `;
-      container.appendChild(div);
-    });
-  }
+async function loadServiceCards(){
+const { data, error } = await sb.from('cards').select('*').eq('group_key','services_systems').eq('visible', true).order('sort_order');
+const container = document.getElementById('cards-services_systems');
+if(error || !container) return;
+container.innerHTML = '';
+(data || []).forEach((card, i) => {
+const featuresHtml = (card.features || []).map(f => `<li>${f}</li>`).join('');
+const div = document.createElement('div');
+div.className = 'card';
+div.innerHTML = `
+<span class="tag ${tagClass(i)}">${card.tag || ''}</span>
+<h3>${card.title || ''}</h3>
+<p>${card.body || ''}</p>
+<ul class="price-list" style="margin-top:16px;">${featuresHtml}</ul>
+`;
+container.appendChild(div);
+});
+}
 
-  async function loadPricingCards(group, containerId){
-    const { data, error } = await sb.from('cards').select('*').eq('group_key', group).eq('visible', true).order('sort_order');
-    const container = document.getElementById(containerId);
-    if(error || !container) return;
-    container.innerHTML = '';
-    (data || []).forEach(card => {
-      const featuresHtml = (card.features || []).map(f => `<li>${f}</li>`).join('');
-      const div = document.createElement('div');
-      div.className = 'price-card' + (card.featured ? ' featured' : '');
-      div.innerHTML = `
-        <div class="price-name">${card.title || ''}</div>
-        <div class="price-value">${card.amount || ''}</div>
-        <ul class="price-list">${featuresHtml}</ul>
-      `;
-      container.appendChild(div);
-    });
-  }
+async function loadPricingCards(group, containerId){
+const { data, error } = await sb.from('cards').select('*').eq('group_key', group).eq('visible', true).order('sort_order');
+const container = document.getElementById(containerId);
+if(error || !container) return;
+container.innerHTML = '';
+(data || []).forEach(card => {
+const featuresHtml = (card.features || []).map(f => `<li>${f}</li>`).join('');
+const div = document.createElement('div');
+div.className = 'price-card' + (card.featured ? ' featured' : '');
+div.innerHTML = `
+<div class="price-name">${card.title || ''}</div>
+<div class="price-value">${card.amount || ''}</div>
+<ul class="price-list">${featuresHtml}</ul>
+`;
+container.appendChild(div);
+});
+}
 
-  async function loadExtrasStrips(){
-    const { data, error } = await sb.from('cards').select('*').eq('group_key','pricing_extras').eq('visible', true).order('sort_order');
-    const container = document.getElementById('cards-pricing_extras');
-    if(error || !container) return;
-    container.innerHTML = '';
-    (data || []).forEach(card => {
-      const div = document.createElement('div');
-      div.className = 'strip';
-      div.innerHTML = `
-        <div><h4>${card.title || ''}</h4><p>${card.body || ''}</p></div>
-        <div class="amount">${card.amount || ''}</div>
-      `;
-      container.appendChild(div);
-    });
-  }
+async function loadExtrasStrips(){
+const { data, error } = await sb.from('cards').select('*').eq('group_key','pricing_extras').eq('visible', true).order('sort_order');
+const container = document.getElementById('cards-pricing_extras');
+if(error || !container) return;
+container.innerHTML = '';
+(data || []).forEach(card => {
+const div = document.createElement('div');
+div.className = 'strip';
+div.innerHTML = `
+<div><h4>${card.title || ''}</h4><p>${card.body || ''}</p></div>
+<div class="amount">${card.amount || ''}</div>
+`;
+container.appendChild(div);
+});
+}
 
-  let caseStudies = [];
-  let galleryIndex = 0;
+let caseStudies = [];
+let galleryIndex = 0;
 
-  async function loadWorkCards(){
-    const { data, error } = await sb.from('cards').select('*').eq('group_key','work').eq('visible', true).order('sort_order');
-    const container = document.getElementById('cards-work');
-    if(error || !container) return;
-    caseStudies = data || [];
-    container.innerHTML = '';
-    caseStudies.forEach((card, i) => {
-      const visualHtml = card.image_url
-        ? `<img src="${card.image_url}" alt="${card.title || ''}">`
-        : (card.tag || '');
-      const div = document.createElement('div');
-      div.className = 'case-card';
-      div.innerHTML = `
-        <div class="case-visual ${i % 2 === 1 ? 'alt' : ''}">${visualHtml}</div>
-        <div>
-          <span class="tag ${tagClass(i)}">${card.tag || ''}</span>
-          <h3>${card.title || ''}</h3>
-          <p>${card.body || ''}</p>
-          <span class="open-hint">View the full breakdown →</span>
-        </div>
-      `;
-      div.addEventListener('click', () => openCaseModal(i));
-      container.appendChild(div);
-    });
-  }
+// ---- Code-managed case study: Noble's Martial Arts (NMA) ----
+// This entry is hardcoded here rather than stored in Supabase, so it will NOT show up
+// or be editable in admin.html. Any future copy/image changes need to happen in this file.
+const staticCaseStudies = [
+{
+tag: 'CRM + Website',
+title: "Noble's Martial Arts — Full CRM & Website Build",
+body: "A ground-up operational CRM and public website for Brandon's own youth martial arts program — designed, built, and running live in the classroom today.",
+image_url: 'images/case-studies/nma-website-home.png',
+gallery_images: [
+'images/case-studies/nma-website-home.png',
+'images/case-studies/nma-website-register.png',
+'images/case-studies/nma-website-parent-hub.png',
+'images/case-studies/nma-crm-class-plan-builder.png',
+'images/case-studies/nma-crm-class-timer.png'
+// Attendance, Revenue, and Dashboard screenshots held pending Brandon's sign-off on
+// visible student initials and published dollar figures. Add their paths here once approved:
+// 'images/case-studies/nma-crm-attendance.png',
+// 'images/case-studies/nma-crm-revenue.png',
+// 'images/case-studies/nma-crm-dashboard.png',
+],
+need_text: "Before Clemontyne, Noble's Martial Arts ran entirely on spreadsheets, paper rosters, and manual emails — nothing tied attendance, belt progression, revenue, or parent communication together. Attendance data lived only inside a raw export from the city's registration system, belt progression across five class groups followed genuinely complex rules with no system enforcing them, and parents had no structured way to report an absence.",
+built_text: "A full operational CRM covering roster and attendance, belt testing and promotion tracking built around NMA's real belt-path rules, revenue and margin reporting, and class planning tools — paired with a public website handling registration, a parent hub, and absence reporting. Both run on one shared backend, so a parent's absence report on the website shows up instantly on the CRM and admin panel with no manual syncing between them.",
+outcome_text: "The system now runs what used to be entirely manual: roughly 23 CRM modules replacing spreadsheets and paper lists, and an absence-reporting flow that moved from an unstructured phone/text channel to a structured form that writes directly into attendance in real time. Staff can work from whichever surface is fastest in the moment — full CRM at a desk, lightweight admin panel from a phone — without reconciling data between them afterward."
+}
+];
+// ---------------------------------------------------------------
 
-  function openCaseModal(i){
-    const card = caseStudies[i];
-    if(!card) return;
-    galleryIndex = 0;
-    document.getElementById('modal-tag').textContent = card.tag || '';
-    document.getElementById('modal-title').textContent = card.title || '';
+async function loadWorkCards(){
+const { data, error } = await sb.from('cards').select('*').eq('group_key','work').eq('visible', true).order('sort_order');
+const container = document.getElementById('cards-work');
+if(!container) return;
+const dynamicCards = (!error && data) ? data : [];
+caseStudies = [...staticCaseStudies, ...dynamicCards];
+container.innerHTML = '';
+caseStudies.forEach((card, i) => {
+const visualHtml = card.image_url
+? `<img src="${card.image_url}" alt="${card.title || ''}">`
+: (card.tag || '');
+const div = document.createElement('div');
+div.className = 'case-card';
+div.innerHTML = `
+<div class="case-visual ${i % 2 === 1 ? 'alt' : ''}">${visualHtml}</div>
+<div>
+<span class="tag ${tagClass(i)}">${card.tag || ''}</span>
+<h3>${card.title || ''}</h3>
+<p>${card.body || ''}</p>
+<span class="open-hint">View the full breakdown →</span>
+</div>
+`;
+div.addEventListener('click', () => openCaseModal(i));
+container.appendChild(div);
+});
+}
 
-    setModalSection('need', card.need_text);
-    setModalSection('built', card.built_text || card.body);
-    setModalSection('outcome', card.outcome_text);
+function openCaseModal(i){
+const card = caseStudies[i];
+if(!card) return;
+galleryIndex = 0;
+document.getElementById('modal-tag').textContent = card.tag || '';
+document.getElementById('modal-title').textContent = card.title || '';
+setModalSection('need', card.need_text);
+setModalSection('built', card.built_text || card.body);
+setModalSection('outcome', card.outcome_text);
+window._currentGallery = (card.gallery_images && card.gallery_images.length) ? card.gallery_images : (card.image_url ? [card.image_url] : []);
+renderGallery();
+document.getElementById('case-modal').classList.add('open');
+}
 
-    window._currentGallery = (card.gallery_images && card.gallery_images.length) ? card.gallery_images : (card.image_url ? [card.image_url] : []);
-    renderGallery();
+function setModalSection(key, value){
+const wrap = document.getElementById('modal-' + key + '-wrap');
+const el = document.getElementById('modal-' + key);
+if(value && value.trim()){
+wrap.style.display = 'block';
+el.textContent = value;
+} else {
+wrap.style.display = 'none';
+}
+}
 
-    document.getElementById('case-modal').classList.add('open');
-  }
+function renderGallery(){
+const gallery = document.getElementById('modal-gallery');
+const images = window._currentGallery || [];
+let inner = `<button class="modal-close" onclick="closeCaseModal()">&times;</button>`;
+if(images.length === 0){
+inner += `<div class="empty">No screenshots yet</div>`;
+} else {
+inner += `<img src="${images[galleryIndex]}" alt="">`;
+if(images.length > 1){
+inner += `
+<button class="modal-nav prev" onclick="shiftGallery(-1)">&#8249;</button>
+<button class="modal-nav next" onclick="shiftGallery(1)">&#8250;</button>
+<div class="modal-dots">${images.map((_,idx) => `<span class="${idx===galleryIndex?'active':''}"></span>`).join('')}</div>
+`;
+}
+}
+gallery.innerHTML = inner;
+}
 
-  function setModalSection(key, value){
-    const wrap = document.getElementById('modal-' + key + '-wrap');
-    const el = document.getElementById('modal-' + key);
-    if(value && value.trim()){
-      wrap.style.display = 'block';
-      el.textContent = value;
-    } else {
-      wrap.style.display = 'none';
-    }
-  }
+function shiftGallery(dir){
+const images = window._currentGallery || [];
+if(images.length === 0) return;
+galleryIndex = (galleryIndex + dir + images.length) % images.length;
+renderGallery();
+}
 
-  function renderGallery(){
-    const gallery = document.getElementById('modal-gallery');
-    const images = window._currentGallery || [];
-    let inner = `<button class="modal-close" onclick="closeCaseModal()">&times;</button>`;
-    if(images.length === 0){
-      inner += `<div class="empty">No screenshots yet</div>`;
-    } else {
-      inner += `<img src="${images[galleryIndex]}" alt="">`;
-      if(images.length > 1){
-        inner += `
-          <button class="modal-nav prev" onclick="shiftGallery(-1)">&#8249;</button>
-          <button class="modal-nav next" onclick="shiftGallery(1)">&#8250;</button>
-          <div class="modal-dots">${images.map((_,idx) => `<span class="${idx===galleryIndex?'active':''}"></span>`).join('')}</div>
-        `;
-      }
-    }
-    gallery.innerHTML = inner;
-  }
+function closeCaseModal(){
+document.getElementById('case-modal').classList.remove('open');
+}
 
-  function shiftGallery(dir){
-    const images = window._currentGallery || [];
-    if(images.length === 0) return;
-    galleryIndex = (galleryIndex + dir + images.length) % images.length;
-    renderGallery();
-  }
+document.addEventListener('DOMContentLoaded', () => {
+document.getElementById('case-modal').addEventListener('click', (e) => {
+if(e.target.id === 'case-modal') closeCaseModal();
+});
+});
 
-  function closeCaseModal(){
-    document.getElementById('case-modal').classList.remove('open');
-  }
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('case-modal').addEventListener('click', (e) => {
-      if(e.target.id === 'case-modal') closeCaseModal();
-    });
-  });
+async function loadAll(){
+await Promise.all([
+loadSiteText(),
+loadSimpleCards('who_we_build_for', 'cards-who_we_build_for'),
+loadSimpleCards('how_it_works', 'cards-how_it_works'),
+loadServiceCards(),
+loadSimpleCards('automation_types', 'cards-automation_types'),
+loadPricingCards('pricing_crm', 'cards-pricing_crm'),
+loadPricingCards('pricing_website', 'cards-pricing_website'),
+loadExtrasStrips(),
+loadWorkCards(),
+]);
+}
 
-  async function loadAll(){
-    await Promise.all([
-      loadSiteText(),
-      loadSimpleCards('who_we_build_for', 'cards-who_we_build_for'),
-      loadSimpleCards('how_it_works', 'cards-how_it_works'),
-      loadServiceCards(),
-      loadSimpleCards('automation_types', 'cards-automation_types'),
-      loadPricingCards('pricing_crm', 'cards-pricing_crm'),
-      loadPricingCards('pricing_website', 'cards-pricing_website'),
-      loadExtrasStrips(),
-      loadWorkCards(),
-    ]);
-  }
-
-  loadAll();
+loadAll();
 </script>
 
 <div class="modal-overlay" id="case-modal">
-  <div class="modal-box">
-    <div class="modal-gallery" id="modal-gallery">
-      <button class="modal-close" onclick="closeCaseModal()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <span class="tag" id="modal-tag"></span>
-      <h3 id="modal-title"></h3>
-      <div class="modal-section" id="modal-need-wrap">
-        <h4>What they needed</h4>
-        <p id="modal-need"></p>
-      </div>
-      <div class="modal-section" id="modal-built-wrap">
-        <h4>What we built</h4>
-        <p id="modal-built"></p>
-      </div>
-      <div class="modal-section" id="modal-outcome-wrap">
-        <h4>The outcome</h4>
-        <p id="modal-outcome"></p>
-      </div>
-    </div>
-  </div>
+<div class="modal-box">
+<div class="modal-gallery" id="modal-gallery">
+<button class="modal-close" onclick="closeCaseModal()">&times;</button>
 </div>
-
+<div class="modal-body">
+<span class="tag" id="modal-tag"></span>
+<h3 id="modal-title"></h3>
+<div class="modal-section" id="modal-need-wrap">
+<h4>What they needed</h4>
+<p id="modal-need"></p>
+</div>
+<div class="modal-section" id="modal-built-wrap">
+<h4>What we built</h4>
+<p id="modal-built"></p>
+</div>
+<div class="modal-section" id="modal-outcome-wrap">
+<h4>The outcome</h4>
+<p id="modal-outcome"></p>
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>
