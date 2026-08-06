@@ -101,6 +101,13 @@ color:var(--leaf-deep); font-family:'Fraunces',serif; font-size:15px; text-align
 .case-card{ cursor:pointer; transition:transform .15s ease, box-shadow .15s ease; }
 .case-card:hover{ transform:translateY(-2px); box-shadow:0 16px 36px rgba(42,51,40,0.1); }
 .case-card .open-hint{ font-size:12.5px; color:var(--citrus-deep); font-weight:600; margin-top:10px; display:inline-block; }
+.team-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:24px; }
+.team-card{ background:var(--card); border:1px solid var(--line); border-radius:18px; padding:30px 26px;
+display:flex; gap:20px; align-items:flex-start; box-shadow:var(--shadow); }
+.team-photo{ width:88px; height:88px; border-radius:50%; object-fit:cover; flex-shrink:0; border:3px solid var(--leaf-pale); }
+.team-name{ font-family:'Fraunces',serif; font-size:19px; margin-bottom:2px; }
+.team-role{ font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--citrus-deep); margin-bottom:10px; display:block; }
+.team-bio{ font-size:14px; color:var(--ink-soft); }
 .modal-overlay{ position:fixed; inset:0; background:rgba(42,51,40,0.55); display:none; align-items:flex-start; justify-content:center;
 padding:40px 20px; z-index:100; overflow-y:auto; }
 .modal-overlay.open{ display:flex; }
@@ -149,6 +156,8 @@ pointer-events:none;
 .grid-2{ grid-template-columns:1fr; }
 .case-card{ grid-template-columns:1fr; }
 .band{ flex-direction:column; align-items:flex-start; }
+.team-grid{ grid-template-columns:1fr; }
+.team-card{ flex-direction:column; align-items:center; text-align:center; }
 }
 </style>
 </head>
@@ -194,6 +203,7 @@ pointer-events:none;
 <a href="#services">Services</a>
 <a href="#pricing">Pricing</a>
 <a href="#work">Work</a>
+<a href="#about">About</a>
 <a href="#contact">Contact</a>
 </div>
 <a class="btn" href="#contact">Book a call</a>
@@ -320,6 +330,18 @@ pointer-events:none;
 <h2 id="t-work_title"></h2>
 </div>
 <div id="cards-work"></div>
+</div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+<div class="wrap">
+<div class="section-head">
+<div class="eyebrow" id="t-about_eyebrow"></div>
+<h2 id="t-about_title"></h2>
+<p id="t-about_body" style="margin-top:12px; max-width:640px;"></p>
+</div>
+<div class="team-grid" id="cards-about_team"></div>
 </div>
 </section>
 
@@ -464,6 +486,26 @@ container.appendChild(div);
 });
 }
 
+async function loadTeamCards(){
+const { data, error } = await sb.from('cards').select('*').eq('group_key','about_team').eq('visible', true).order('sort_order');
+const container = document.getElementById('cards-about_team');
+if(error || !container) return;
+container.innerHTML = '';
+(data || []).forEach(card => {
+const div = document.createElement('div');
+div.className = 'team-card';
+div.innerHTML = `
+${card.image_url ? `<img class="team-photo" src="${card.image_url}" alt="${card.title || ''}">` : ''}
+<div>
+<div class="team-name">${card.title || ''}</div>
+<span class="team-role">${card.tag || ''}</span>
+<p class="team-bio">${card.body || ''}</p>
+</div>
+`;
+container.appendChild(div);
+});
+}
+
 let caseStudies = [];
 let galleryIndex = 0;
 
@@ -488,7 +530,7 @@ gallery_images: [
 ],
 need_text: "Before Clemontyne, Noble's Martial Arts ran entirely on spreadsheets, paper rosters, and manual emails — nothing tied attendance, belt progression, revenue, or parent communication together. Attendance data lived only inside a raw export from the city's registration system, belt progression across five class groups followed genuinely complex rules with no system enforcing them, and parents had no structured way to report an absence.",
 built_text: "A full operational CRM covering roster and attendance, belt testing and promotion tracking built around NMA's real belt-path rules, revenue and margin reporting, and class planning tools — paired with a public website handling registration, a parent hub, and absence reporting. Both run on one shared backend, so a parent's absence report on the website shows up instantly on the CRM and admin panel with no manual syncing between them.",
-outcome_text: "The system now runs what used to be entirely manual: roughly 23 CRM modules replacing spreadsheets and paper lists, and an absence-reporting flow that moved from an unstructured phone/text channel to a structured form that writes directly into attendance in real time. Staff can work from whichever surface is fastest in the moment — full CRM at a desk, lightweight admin panel from a phone — without reconciling data between them afterward."
+outcome_text: "The system now runs what used to be entirely manual: roughly 23 CRM modules replacing spreadsheets and paper lists, and an absence-reporting flow that moved from an unstructured phone/text channel to a structured form that writes directly into attendance in real time. Brandon now estimates the system saves him 15+ hours a week compared to running things by hand. Staff can work from whichever surface is fastest in the moment — full CRM at a desk, lightweight admin panel from a phone — without reconciling data between them afterward."
 }
 ];
 // ---------------------------------------------------------------
@@ -592,6 +634,7 @@ loadPricingCards('pricing_crm', 'cards-pricing_crm'),
 loadPricingCards('pricing_website', 'cards-pricing_website'),
 loadExtrasStrips(),
 loadWorkCards(),
+loadTeamCards(),
 ]);
 }
 
