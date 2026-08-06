@@ -114,6 +114,30 @@ img,svg{ display:block; max-width:100%; }
   color:var(--leaf-deep); font-family:'Fraunces',serif; font-size:15px; text-align:center; padding:20px; overflow:hidden; }
 .case-visual img{ width:100%; height:100%; object-fit:cover; border-radius:14px; }
 .case-visual.alt{ background:var(--citrus-pale); color:var(--citrus-deep); }
+.case-card{ cursor:pointer; transition:transform .15s ease, box-shadow .15s ease; }
+.case-card:hover{ transform:translateY(-2px); box-shadow:0 16px 36px rgba(42,51,40,0.1); }
+.case-card .open-hint{ font-size:12.5px; color:var(--citrus-deep); font-weight:600; margin-top:10px; display:inline-block; }
+
+.modal-overlay{ position:fixed; inset:0; background:rgba(42,51,40,0.55); display:none; align-items:flex-start; justify-content:center;
+  padding:40px 20px; z-index:100; overflow-y:auto; }
+.modal-overlay.open{ display:flex; }
+.modal-box{ background:var(--paper); border-radius:20px; max-width:760px; width:100%; padding:0; overflow:hidden; margin-bottom:40px; }
+.modal-gallery{ position:relative; background:var(--ink); height:360px; display:flex; align-items:center; justify-content:center; }
+.modal-gallery img{ width:100%; height:100%; object-fit:cover; }
+.modal-gallery .empty{ color:#c9d3c6; font-family:'Fraunces',serif; }
+.modal-nav{ position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.9); border:none;
+  width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:16px; font-weight:700; color:var(--ink); }
+.modal-nav.prev{ left:14px; } .modal-nav.next{ right:14px; }
+.modal-dots{ position:absolute; bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:6px; }
+.modal-dots span{ width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.5); }
+.modal-dots span.active{ background:#fff; }
+.modal-close{ position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.9); border:none; width:32px; height:32px;
+  border-radius:50%; cursor:pointer; font-size:16px; font-weight:700; z-index:2; }
+.modal-body{ padding:32px 36px 36px; }
+.modal-body h3{ font-size:24px; margin-bottom:18px; }
+.modal-section{ margin-bottom:18px; }
+.modal-section h4{ font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--citrus-deep); font-weight:700; margin-bottom:6px; }
+.modal-section p{ font-size:14.5px; color:var(--ink-soft); }
 
 .footer{ border-top:1px solid var(--line); padding:36px 0; margin-top:40px; }
 .footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
@@ -464,12 +488,16 @@ img,svg{ display:block; max-width:100%; }
     });
   }
 
+  let caseStudies = [];
+  let galleryIndex = 0;
+
   async function loadWorkCards(){
     const { data, error } = await sb.from('cards').select('*').eq('group_key','work').eq('visible', true).order('sort_order');
     const container = document.getElementById('cards-work');
     if(error || !container) return;
+    caseStudies = data || [];
     container.innerHTML = '';
-    (data || []).forEach((card, i) => {
+    caseStudies.forEach((card, i) => {
       const visualHtml = card.image_url
         ? `<img src="${card.image_url}" alt="${card.title || ''}">`
         : (card.tag || '');
@@ -481,11 +509,76 @@ img,svg{ display:block; max-width:100%; }
           <span class="tag ${tagClass(i)}">${card.tag || ''}</span>
           <h3>${card.title || ''}</h3>
           <p>${card.body || ''}</p>
+          <span class="open-hint">View the full breakdown →</span>
         </div>
       `;
+      div.addEventListener('click', () => openCaseModal(i));
       container.appendChild(div);
     });
   }
+
+  function openCaseModal(i){
+    const card = caseStudies[i];
+    if(!card) return;
+    galleryIndex = 0;
+    document.getElementById('modal-tag').textContent = card.tag || '';
+    document.getElementById('modal-title').textContent = card.title || '';
+
+    setModalSection('need', card.need_text);
+    setModalSection('built', card.built_text || card.body);
+    setModalSection('outcome', card.outcome_text);
+
+    window._currentGallery = (card.gallery_images && card.gallery_images.length) ? card.gallery_images : (card.image_url ? [card.image_url] : []);
+    renderGallery();
+
+    document.getElementById('case-modal').classList.add('open');
+  }
+
+  function setModalSection(key, value){
+    const wrap = document.getElementById('modal-' + key + '-wrap');
+    const el = document.getElementById('modal-' + key);
+    if(value && value.trim()){
+      wrap.style.display = 'block';
+      el.textContent = value;
+    } else {
+      wrap.style.display = 'none';
+    }
+  }
+
+  function renderGallery(){
+    const gallery = document.getElementById('modal-gallery');
+    const images = window._currentGallery || [];
+    let inner = `<button class="modal-close" onclick="closeCaseModal()">&times;</button>`;
+    if(images.length === 0){
+      inner += `<div class="empty">No screenshots yet</div>`;
+    } else {
+      inner += `<img src="${images[galleryIndex]}" alt="">`;
+      if(images.length > 1){
+        inner += `
+          <button class="modal-nav prev" onclick="shiftGallery(-1)">&#8249;</button>
+          <button class="modal-nav next" onclick="shiftGallery(1)">&#8250;</button>
+          <div class="modal-dots">${images.map((_,idx) => `<span class="${idx===galleryIndex?'active':''}"></span>`).join('')}</div>
+        `;
+      }
+    }
+    gallery.innerHTML = inner;
+  }
+
+  function shiftGallery(dir){
+    const images = window._currentGallery || [];
+    if(images.length === 0) return;
+    galleryIndex = (galleryIndex + dir + images.length) % images.length;
+    renderGallery();
+  }
+
+  function closeCaseModal(){
+    document.getElementById('case-modal').classList.remove('open');
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('case-modal').addEventListener('click', (e) => {
+      if(e.target.id === 'case-modal') closeCaseModal();
+    });
+  });
 
   async function loadAll(){
     await Promise.all([
@@ -503,6 +596,30 @@ img,svg{ display:block; max-width:100%; }
 
   loadAll();
 </script>
+
+<div class="modal-overlay" id="case-modal">
+  <div class="modal-box">
+    <div class="modal-gallery" id="modal-gallery">
+      <button class="modal-close" onclick="closeCaseModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <span class="tag" id="modal-tag"></span>
+      <h3 id="modal-title"></h3>
+      <div class="modal-section" id="modal-need-wrap">
+        <h4>What they needed</h4>
+        <p id="modal-need"></p>
+      </div>
+      <div class="modal-section" id="modal-built-wrap">
+        <h4>What we built</h4>
+        <p id="modal-built"></p>
+      </div>
+      <div class="modal-section" id="modal-outcome-wrap">
+        <h4>The outcome</h4>
+        <p id="modal-outcome"></p>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
