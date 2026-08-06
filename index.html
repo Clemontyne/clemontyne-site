@@ -337,9 +337,9 @@ pointer-events:none;
 <section class="section" id="about">
 <div class="wrap">
 <div class="section-head">
-<div class="eyebrow" id="t-about_eyebrow"></div>
-<h2 id="t-about_title"></h2>
-<p id="t-about_body" style="margin-top:12px; max-width:640px;"></p>
+<div class="eyebrow" id="t-about_eyebrow">The people behind Clemontyne</div>
+<h2 id="t-about_title">Who We Are</h2>
+<p id="t-about_body" style="margin-top:12px; max-width:640px;">Courtney Christiansen and Brandon Noble co-founded Clemontyne after seeing the same problem play out across coaching businesses, youth programs, and local service companies: off-the-shelf tools that almost fit, and manual workarounds that eat up hours every week. Clemontyne builds custom-coded CRMs, websites, and admin systems — nothing templated, nothing bloated — so small businesses get software that actually matches how they operate.</p>
 </div>
 <div class="team-grid" id="cards-about_team"></div>
 </div>
@@ -470,12 +470,24 @@ container.appendChild(div);
 });
 }
 
+// ---- Code-managed: Systems Audit line item ----
+const staticExtrasStrips = [
+{
+title: "Systems Audit",
+body: "A 45–60 minute working session on your current setup — what's working, what's breaking down, what's falling through the cracks — followed by a written recommendation on what to fix first. Credited toward any package if you book within 30 days.",
+amount: "$150"
+}
+];
+// -------------------------------------------------
+
 async function loadExtrasStrips(){
 const { data, error } = await sb.from('cards').select('*').eq('group_key','pricing_extras').eq('visible', true).order('sort_order');
 const container = document.getElementById('cards-pricing_extras');
-if(error || !container) return;
+if(!container) return;
+const dynamicCards = (!error && data) ? data : [];
+const strips = [...staticExtrasStrips, ...dynamicCards];
 container.innerHTML = '';
-(data || []).forEach(card => {
+strips.forEach(card => {
 const div = document.createElement('div');
 div.className = 'strip';
 div.innerHTML = `
@@ -486,12 +498,31 @@ container.appendChild(div);
 });
 }
 
+// ---- Code-managed: About/Team section ----
+const staticTeamCards = [
+{
+title: "Courtney Christiansen",
+tag: "Co-Founder",
+image_url: "images/team/courtney.jpg",
+body: "Courtney brings a marketing and client-facing background to Clemontyne, leading discovery calls, proposals, and the conversations that turn a business problem into a working system. But she's not just the front door — Courtney is also a key CRM builder, having built Willowood Ventures' sales pipeline CRM from the ground up. That combination is rare: she can talk through what a client actually needs and then build it herself, so nothing gets lost in translation between the sales conversation and the working system."
+},
+{
+title: "Brandon Noble",
+tag: "Co-Founder",
+image_url: "images/team/brandon.jpg",
+body: "Brandon spent years building and running a youth martial arts program from the ground up — including the operational CRM that now powers it. That hands-on experience is what shaped Clemontyne's approach: systems should work the way the business actually runs, not the other way around. Brandon leads documentation, workflow mapping, and the behind-the-scenes structure that keeps client projects clean and on track."
+}
+];
+// -------------------------------------------
+
 async function loadTeamCards(){
 const { data, error } = await sb.from('cards').select('*').eq('group_key','about_team').eq('visible', true).order('sort_order');
 const container = document.getElementById('cards-about_team');
-if(error || !container) return;
+if(!container) return;
+const dynamicCards = (!error && data) ? data : [];
+const cards = [...staticTeamCards, ...dynamicCards];
 container.innerHTML = '';
-(data || []).forEach(card => {
+cards.forEach(card => {
 const div = document.createElement('div');
 div.className = 'team-card';
 div.innerHTML = `
