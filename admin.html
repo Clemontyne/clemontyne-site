@@ -283,7 +283,18 @@
       ${(isPricing || isExtras) ? `<label>${isPricing ? 'Price (e.g. $1,500)' : 'Amount (e.g. 10% off the pair)'}</label><input id="amount-${card.id}" value="${(card.amount||'').replace(/"/g,'&quot;')}">` : ''}
       ${isPricing ? `<label>Features (one per line)</label><textarea id="features-${card.id}">${featuresStr}</textarea>
         <div class="checkbox-row"><input type="checkbox" id="featured-${card.id}" ${card.featured?'checked':''}> Mark as "Most chosen"</div>` : ''}
-      ${isWork ? `<label>Image URL (optional — leave blank to use the default color block)</label><input id="image-${card.id}" value="${(card.image_url||'').replace(/"/g,'&quot;')}">` : ''}
+      ${isWork ? `
+        <label>Cover image URL (shown on the site's Work section — leave blank for the default color block)</label>
+        <input id="image-${card.id}" value="${(card.image_url||'').replace(/"/g,'&quot;')}">
+        <label>Gallery images (one URL per line — shown in the popup when someone clicks this case study)</label>
+        <textarea id="gallery-${card.id}">${(card.gallery_images||[]).join('\n')}</textarea>
+        <label>What they needed</label>
+        <textarea id="need-${card.id}">${card.need_text||''}</textarea>
+        <label>What we built</label>
+        <textarea id="built-${card.id}">${card.built_text||''}</textarea>
+        <label>The outcome</label>
+        <textarea id="outcome-${card.id}">${card.outcome_text||''}</textarea>
+      ` : ''}
       <div class="checkbox-row"><input type="checkbox" id="visible-${card.id}" ${card.visible?'checked':''}> Visible on live site</div>
       <div class="save-row">
         <span class="saved-msg" id="saved-card-${card.id}">Saved ✓</span>
@@ -321,6 +332,14 @@
     if(amountEl) update.amount = amountEl.value;
     const imageEl = document.getElementById('image-' + id);
     if(imageEl) update.image_url = imageEl.value;
+    const galleryEl = document.getElementById('gallery-' + id);
+    if(galleryEl) update.gallery_images = galleryEl.value.split('\n').map(s => s.trim()).filter(Boolean);
+    const needEl = document.getElementById('need-' + id);
+    if(needEl) update.need_text = needEl.value;
+    const builtEl = document.getElementById('built-' + id);
+    if(builtEl) update.built_text = builtEl.value;
+    const outcomeEl = document.getElementById('outcome-' + id);
+    if(outcomeEl) update.outcome_text = outcomeEl.value;
     if(isPricing){
       const featEl = document.getElementById('features-' + id);
       update.features = featEl.value.split('\n').map(s => s.trim()).filter(Boolean);
