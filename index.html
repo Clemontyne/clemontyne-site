@@ -108,6 +108,26 @@ display:flex; gap:20px; align-items:flex-start; box-shadow:var(--shadow); }
 .team-name{ font-family:'Fraunces',serif; font-size:19px; margin-bottom:2px; }
 .team-role{ font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--citrus-deep); margin-bottom:10px; display:block; }
 .team-bio{ font-size:14px; color:var(--ink-soft); }
+.audit-highlight{ background:var(--card); border:2px solid var(--citrus); border-radius:18px; padding:28px 30px;
+display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; margin-bottom:32px; box-shadow:var(--shadow); }
+.audit-badge{ display:inline-block; font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+background:var(--citrus-pale); color:var(--citrus-deep); padding:4px 10px; border-radius:20px; margin-bottom:10px; }
+.audit-highlight h3{ font-size:20px; margin-bottom:8px; }
+.audit-highlight p{ font-size:14px; color:var(--ink-soft); max-width:520px; }
+.audit-price{ text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
+.audit-amount{ font-family:'Fraunces',serif; font-size:30px; color:var(--citrus-deep); }
+.lead-form{ display:flex; flex-direction:column; gap:14px; text-align:left; margin-top:10px; }
+.form-row{ display:flex; gap:14px; }
+.lead-form input, .lead-form select, .lead-form textarea{
+font-family:'Inter',sans-serif; font-size:14px; padding:12px 14px; border:1.5px solid var(--line); border-radius:10px;
+background:var(--paper); color:var(--ink); flex:1; width:100%;
+}
+.lead-form input:focus, .lead-form select:focus, .lead-form textarea:focus{ outline:none; border-color:var(--citrus); }
+.lead-form textarea{ resize:vertical; }
+.lead-form button{ align-self:flex-start; border:none; cursor:pointer; }
+.lead-form-status{ font-size:13px; margin-top:2px; min-height:16px; }
+.lead-form-status.success{ color:var(--leaf-deep); }
+.lead-form-status.error{ color:var(--citrus-deep); }
 .modal-overlay{ position:fixed; inset:0; background:rgba(42,51,40,0.55); display:none; align-items:flex-start; justify-content:center;
 padding:40px 20px; z-index:100; overflow-y:auto; }
 .modal-overlay.open{ display:flex; }
@@ -158,6 +178,9 @@ pointer-events:none;
 .band{ flex-direction:column; align-items:flex-start; }
 .team-grid{ grid-template-columns:1fr; }
 .team-card{ flex-direction:column; align-items:center; text-align:center; }
+.audit-highlight{ flex-direction:column; align-items:flex-start; }
+.audit-price{ align-items:flex-start; }
+.form-row{ flex-direction:column; }
 }
 </style>
 </head>
@@ -286,6 +309,17 @@ pointer-events:none;
 <div class="eyebrow" id="t-pricing_eyebrow"></div>
 <h2 id="t-pricing_title"></h2>
 </div>
+<div class="audit-highlight">
+<div>
+<span class="audit-badge">Start Here</span>
+<h3>Systems Audit</h3>
+<p>A 45–60 minute working session on your current setup — what's working, what's breaking down, what's falling through the cracks — followed by a written recommendation on what to fix first. Credited toward any package if you book within 30 days.</p>
+</div>
+<div class="audit-price">
+<div class="audit-amount">$150</div>
+<a class="btn" href="#contact">Book the audit</a>
+</div>
+</div>
 <div class="grid-3" id="cards-pricing_crm"></div>
 </div>
 </section>
@@ -365,10 +399,26 @@ pointer-events:none;
 <div class="contact-card">
 <h2 id="t-contact_card_title"></h2>
 <p id="t-contact_card_body"></p>
-<a class="contact-email" id="t-contact_email_link" href="#"></a>
-<div>
-<a class="btn" id="t-contact_email_btn" href="#">Send us an email</a>
+<form id="lead-form" class="lead-form">
+<div class="form-row">
+<input type="text" id="lead-business" placeholder="Business name" required>
+<input type="text" id="lead-name" placeholder="Your name" required>
 </div>
+<div class="form-row">
+<input type="email" id="lead-email" placeholder="Email" required>
+<input type="tel" id="lead-phone" placeholder="Phone (optional)">
+</div>
+<select id="lead-preferred">
+<option value="">Preferred contact method</option>
+<option value="email">Email</option>
+<option value="phone">Phone</option>
+<option value="text">Text</option>
+</select>
+<textarea id="lead-message" placeholder="What are you looking to build? (optional)" rows="3"></textarea>
+<button type="submit" class="btn" id="lead-submit-btn">Send it over</button>
+<p id="lead-form-status" class="lead-form-status"></p>
+</form>
+<p class="contact-meta">Prefer email? Reach us directly at <a id="t-contact_email_link" href="#"></a></p>
 <p class="contact-meta" id="t-contact_meta"></p>
 </div>
 </div>
@@ -470,14 +520,8 @@ container.appendChild(div);
 });
 }
 
-// ---- Code-managed: Systems Audit line item ----
-const staticExtrasStrips = [
-{
-title: "Systems Audit",
-body: "A 45–60 minute working session on your current setup — what's working, what's breaking down, what's falling through the cracks — followed by a written recommendation on what to fix first. Credited toward any package if you book within 30 days.",
-amount: "$150"
-}
-];
+// ---- Code-managed: additional pricing extras (currently none — Systems Audit moved to the featured spot above) ----
+const staticExtrasStrips = [];
 // -------------------------------------------------
 
 async function loadExtrasStrips(){
@@ -652,6 +696,42 @@ document.addEventListener('DOMContentLoaded', () => {
 document.getElementById('case-modal').addEventListener('click', (e) => {
 if(e.target.id === 'case-modal') closeCaseModal();
 });
+
+const leadForm = document.getElementById('lead-form');
+if(leadForm){
+leadForm.addEventListener('submit', async (e) => {
+e.preventDefault();
+const statusEl = document.getElementById('lead-form-status');
+const btn = document.getElementById('lead-submit-btn');
+const payload = {
+business_name: document.getElementById('lead-business').value.trim(),
+contact_name: document.getElementById('lead-name').value.trim(),
+email: document.getElementById('lead-email').value.trim(),
+phone: document.getElementById('lead-phone').value.trim(),
+preferred_contact: document.getElementById('lead-preferred').value,
+message: document.getElementById('lead-message').value.trim(),
+source: 'website'
+};
+btn.disabled = true;
+btn.textContent = 'Sending…';
+statusEl.textContent = '';
+statusEl.className = 'lead-form-status';
+const { error } = await sb.from('leads').insert([payload]);
+if(error){
+console.error('Lead insert failed', error);
+statusEl.textContent = "Something went wrong on our end — please email us directly at hello@clemontyne.com.";
+statusEl.className = 'lead-form-status error';
+btn.disabled = false;
+btn.textContent = 'Send it over';
+} else {
+statusEl.textContent = "Got it — we'll be in touch soon.";
+statusEl.className = 'lead-form-status success';
+leadForm.reset();
+btn.disabled = false;
+btn.textContent = 'Send it over';
+}
+});
+}
 });
 
 async function loadAll(){
