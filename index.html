@@ -4,10 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clemontyne & Co. — Custom Business Systems</title>
-<meta name="description" content="Custom-coded CRMs, websites, and admin tools for coaches, youth programs, and local service businesses.">
+<meta name="description" content="Custom-coded CRMs, websites, and admin tools for businesses that have outgrown spreadsheets, sticky notes, and no-code workarounds.">
+
+<!-- Open Graph / social preview -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://clemontyne.com/">
+<meta property="og:title" content="Clemontyne & Co. — Custom Business Systems">
+<meta property="og:description" content="Custom-coded CRMs, websites, and admin tools for businesses that have outgrown spreadsheets, sticky notes, and no-code workarounds.">
+<meta property="og:image" content="https://clemontyne.com/images/og-image.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Clemontyne & Co. — Custom Business Systems">
+<meta name="twitter:description" content="Custom-coded CRMs, websites, and admin tools for businesses that have outgrown spreadsheets, sticky notes, and no-code workarounds.">
+<meta name="twitter:image" content="https://clemontyne.com/images/og-image.png">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script>
+// Checks for a prior opt-out decision before GA4 loads, so a decline
+// from a previous visit actually prevents tracking on this page load.
+if (localStorage.getItem('cookie_consent') === 'declined') {
+window['ga-disable-G-J23TNLPLR6'] = true;
+}
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J23TNLPLR6"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'G-J23TNLPLR6');
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap');
 :root{
@@ -16,10 +44,11 @@
 --ink-soft: #5b6b57;
 --line: #e7e2d3;
 --leaf: #6fa97d;
---leaf-deep: #467356;
+--leaf-deep: #3f6a4d;
 --leaf-pale: #dcecdf;
 --citrus: #e8762e;
---citrus-deep:#c15f20;
+--citrus-deep: #9a4c19;
+--citrus-btn: #e87a34;
 --citrus-pale:#fbe0c8;
 --zest: #f0d477;
 --zest-pale: #faf1d3;
@@ -48,9 +77,9 @@ width:26%; height:26%; border-radius:50%; background:#fdf8ef; }
 .brand-name{ font-family:'Fraunces',serif; font-weight:600; font-size:19px; }
 .nav-links{ display:flex; align-items:center; gap:30px; font-size:14.5px; font-weight:500; color:var(--ink-soft); }
 .nav-links a:hover{ color:var(--citrus-deep); }
-.btn{ display:inline-flex; align-items:center; gap:6px; background:var(--citrus); color:#fff; padding:11px 22px; border-radius:10px;
+.btn{ display:inline-flex; align-items:center; gap:6px; background:var(--citrus-btn); color:var(--ink); padding:11px 22px; border-radius:10px;
 font-size:14.5px; font-weight:700; border:none; cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s ease, transform .15s ease; }
-.btn:hover{ background:var(--citrus-deep); transform:translateY(-1px); }
+.btn:hover{ background:#e98444; transform:translateY(-1px); }
 .btn-ghost{ background:transparent; color:var(--ink); border:1.5px solid var(--line); }
 .btn-ghost:hover{ background:var(--leaf-pale); border-color:var(--leaf); }
 .hero{ padding:76px 0 40px; scroll-margin-top:90px; }
@@ -108,6 +137,21 @@ display:flex; gap:20px; align-items:flex-start; box-shadow:var(--shadow); }
 .team-name{ font-family:'Fraunces',serif; font-size:19px; margin-bottom:2px; }
 .team-role{ font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--citrus-deep); margin-bottom:10px; display:block; }
 .team-bio{ font-size:14px; color:var(--ink-soft); }
+.faq-list{ display:flex; flex-direction:column; }
+.faq-item{ padding:22px 0; border-bottom:1px solid var(--line); }
+.faq-item:first-child{ padding-top:0; }
+.faq-item:last-child{ border-bottom:none; padding-bottom:0; }
+.faq-item h3{ font-size:16.5px; margin-bottom:8px; }
+.faq-item p{ font-size:14.5px; }
+.stats-strip{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; text-align:center; }
+.stat-number{ font-family:'Fraunces',serif; font-size:40px; color:var(--citrus-deep); line-height:1; margin-bottom:8px; }
+.stat-label{ font-size:13.5px; color:var(--ink-soft); }
+.cookie-banner{ position:fixed; bottom:20px; left:20px; right:20px; max-width:520px; margin:0 auto;
+background:var(--ink); color:var(--paper); border-radius:14px; padding:20px 22px; box-shadow:0 12px 32px rgba(0,0,0,0.25); z-index:200; }
+.cookie-banner p{ color:#e3e8e1; font-size:13.5px; margin-bottom:14px; }
+.cookie-banner-actions{ display:flex; gap:10px; justify-content:flex-end; }
+.cookie-banner .btn-ghost{ background:transparent; color:var(--paper); border:1.5px solid rgba(255,255,255,0.3); }
+.cookie-banner .btn-ghost:hover{ background:rgba(255,255,255,0.1); }
 .audit-highlight{ background:var(--card); border:2px solid var(--citrus); border-radius:18px; padding:28px 30px;
 display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; margin-bottom:32px; box-shadow:var(--shadow); }
 .audit-badge{ display:inline-block; font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
@@ -122,7 +166,7 @@ background:var(--citrus-pale); color:var(--citrus-deep); padding:4px 10px; borde
 font-family:'Inter',sans-serif; font-size:14px; padding:12px 14px; border:1.5px solid var(--line); border-radius:10px;
 background:var(--paper); color:var(--ink); flex:1; width:100%;
 }
-.lead-form input:focus, .lead-form select:focus, .lead-form textarea:focus{ outline:none; border-color:var(--citrus); }
+.lead-form input:focus, .lead-form select:focus, .lead-form textarea:focus{ outline:none; border-color:var(--citrus); box-shadow:0 0 0 3px rgba(232,118,46,0.35); }
 .lead-form textarea{ resize:vertical; }
 .lead-form button{ align-self:flex-start; border:none; cursor:pointer; }
 .lead-form-status{ font-size:13px; margin-top:2px; min-height:16px; }
@@ -181,6 +225,7 @@ pointer-events:none;
 .audit-highlight{ flex-direction:column; align-items:flex-start; }
 .audit-price{ align-items:flex-start; }
 .form-row{ flex-direction:column; }
+.stats-strip{ grid-template-columns:1fr; gap:28px; }
 }
 </style>
 </head>
@@ -227,9 +272,10 @@ pointer-events:none;
 <a href="#pricing">Pricing</a>
 <a href="#work">Work</a>
 <a href="#about">About</a>
+<a href="#faq">FAQ</a>
 <a href="#contact">Contact</a>
 </div>
-<a class="btn" href="#contact">Book a call</a>
+<a class="btn" href="#" onclick="return openCalendly();">Book a call</a>
 </div>
 </nav>
 
@@ -238,9 +284,9 @@ pointer-events:none;
 <div class="wrap">
 <div class="eyebrow" id="t-hero_eyebrow"></div>
 <h1 id="t-hero_title"></h1>
-<p class="lede" id="t-hero_lede"></p>
+<p class="lede">We design and build custom CRMs, websites, and admin tools for businesses that have outgrown spreadsheets, sticky notes, and no-code workarounds — whether leads are falling through the cracks, operations are running on memory, deals are living in inboxes, or there's no real website at all.</p>
 <div class="hero-actions">
-<a class="btn" href="#contact">Book a free consult</a>
+<a class="btn" href="#" onclick="return openCalendly();">Book a free consult</a>
 <a class="btn btn-ghost" href="#work">See our work</a>
 </div>
 </div>
@@ -298,7 +344,7 @@ pointer-events:none;
 <h3 id="t-band1_title"></h3>
 <p id="t-band1_body"></p>
 </div>
-<a class="btn" href="#contact">Book a free consult</a>
+<a class="btn" href="#" onclick="return openCalendly();">Book a free consult</a>
 </div>
 </div>
 </section>
@@ -339,7 +385,7 @@ pointer-events:none;
 </div>
 <div class="audit-price">
 <div class="audit-amount">$150</div>
-<a class="btn" href="#contact">Book the audit</a>
+<a class="btn" href="#" onclick="return openCalendly();">Book the audit</a>
 </div>
 </div>
 <div class="grid-3">
@@ -380,7 +426,32 @@ pointer-events:none;
 <div class="eyebrow" id="t-pricing_website_eyebrow"></div>
 <h2 id="t-pricing_website_title"></h2>
 </div>
-<div class="grid-3" id="cards-pricing_website"></div>
+<div class="grid-3">
+<div class="price-card">
+<div class="price-name">Starter Site</div>
+<div class="price-value">$500</div>
+<ul class="price-list">
+<li>Custom-designed site, up to 5 pages</li>
+<li>Basic contact/intake form</li>
+</ul>
+</div>
+<div class="price-card featured">
+<div class="price-name">Growth Site</div>
+<div class="price-value">$1,000</div>
+<ul class="price-list">
+<li>Everything in Starter</li>
+<li>Lead capture built into your CRM</li>
+</ul>
+</div>
+<div class="price-card">
+<div class="price-name">Full Website + Admin</div>
+<div class="price-value">$2,500</div>
+<ul class="price-list">
+<li>Everything in Growth</li>
+<li>Full mobile admin layer included</li>
+</ul>
+</div>
+</div>
 </div>
 </section>
 
@@ -401,7 +472,27 @@ pointer-events:none;
 <h3 id="t-band2_title"></h3>
 <p id="t-band2_body"></p>
 </div>
-<a class="btn" href="#contact">Book a free consult</a>
+<a class="btn" href="#" onclick="return openCalendly();">Book a free consult</a>
+</div>
+</div>
+</section>
+
+<!-- STATS -->
+<section class="section tight">
+<div class="wrap">
+<div class="stats-strip">
+<div class="stat">
+<div class="stat-number">15+</div>
+<div class="stat-label">hours saved per week — NMA, owner's estimate</div>
+</div>
+<div class="stat">
+<div class="stat-number">76,000</div>
+<div class="stat-label">dealer records kept in sync automatically — Willowood Ventures</div>
+</div>
+<div class="stat">
+<div class="stat-number">22 → 97</div>
+<div class="stat-label">events booked per month, same period — Willowood Ventures</div>
+</div>
 </div>
 </div>
 </section>
@@ -438,6 +529,46 @@ pointer-events:none;
 </div>
 </section>
 
+<!-- FAQ -->
+<section class="section" id="faq">
+<div class="wrap" style="max-width:760px;">
+<div class="section-head">
+<div class="eyebrow">QUESTIONS</div>
+<h2>Before you reach out</h2>
+</div>
+<div class="faq-list">
+<div class="faq-item">
+<h3>Do we own the code after the build?</h3>
+<p>Yes — you own your specific system: your data, your branding, your customizations. We retain rights to the underlying template architecture we build from, since that's what lets us deliver custom work at a fair price instead of starting from a blank page every time.</p>
+</div>
+<div class="faq-item">
+<h3>How long does a build actually take?</h3>
+<p>Depends on scope. A Starter CRM typically takes 1–2 weeks, a full Website + Intake + CRM package runs 2–4 weeks, and a complete three-layer Operating System takes 4–6 weeks. You'll get a specific timeline before anything starts.</p>
+</div>
+<div class="faq-item">
+<h3>What happens after launch?</h3>
+<p>The Full Operating System includes 30 days of post-launch support for anything that comes up. After that — or for other packages — ongoing help is available through a monthly support retainer, starting at $300/month.</p>
+</div>
+<div class="faq-item">
+<h3>How many revisions are included?</h3>
+<p>Two rounds are included in every package. Additional rounds bill at our standard hourly rate, laid out clearly in your proposal before we start — no surprises partway through.</p>
+</div>
+<div class="faq-item">
+<h3>Do you build on Wix, Squarespace, or other no-code platforms?</h3>
+<p>No — everything we build is custom-coded from the ground up. It costs a little more upfront than a template builder, but you're not boxed in by what a platform allows, and the system is actually yours.</p>
+</div>
+<div class="faq-item">
+<h3>Is the site itself accessible?</h3>
+<p>We build with accessibility in mind from the start — proper structure, alt text, keyboard navigation — rather than bolting it on after the fact.</p>
+</div>
+<div class="faq-item">
+<h3>What if we need something added after launch?</h3>
+<p>That's a Template Customization Sprint — a focused, scoped addition sized as its own small project rather than open-ended scope creep on the original build.</p>
+</div>
+</div>
+</div>
+</section>
+
 <!-- CONTACT -->
 <section class="section" id="contact">
 <div class="wrap">
@@ -450,23 +581,33 @@ pointer-events:none;
 <h2 id="t-contact_card_title"></h2>
 <p id="t-contact_card_body"></p>
 <form id="lead-form" class="lead-form">
+<input type="text" id="lead-website" name="website" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;" tabindex="-1" autocomplete="off">
 <div class="form-row">
-<input type="text" id="lead-business" placeholder="Business name" required>
-<input type="text" id="lead-name" placeholder="Your name" required>
+<input type="text" id="lead-business" placeholder="Business name" aria-label="Business name" required>
+<input type="text" id="lead-name" placeholder="Your name" aria-label="Your name" required>
 </div>
 <div class="form-row">
-<input type="email" id="lead-email" placeholder="Email" required>
-<input type="tel" id="lead-phone" placeholder="Phone (optional)">
+<input type="email" id="lead-email" placeholder="Email" aria-label="Email address" required>
+<input type="tel" id="lead-phone" placeholder="Phone (optional)" aria-label="Phone number, optional">
 </div>
-<select id="lead-preferred">
+<select id="lead-preferred" aria-label="Preferred contact method">
 <option value="">Preferred contact method</option>
 <option value="email">Email</option>
 <option value="phone">Phone</option>
 <option value="text">Text</option>
 </select>
-<textarea id="lead-message" placeholder="What are you looking to build? (optional)" rows="3"></textarea>
+<select id="lead-package" aria-label="What are you interested in">
+<option value="">What are you interested in? (optional)</option>
+<option value="systems_audit">Systems Audit ($150)</option>
+<option value="starter_crm">Starter CRM</option>
+<option value="growth_crm">Growth CRM</option>
+<option value="full_operating_system">Full Operating System</option>
+<option value="website">Website package</option>
+<option value="not_sure">Not sure yet</option>
+</select>
+<textarea id="lead-message" placeholder="What are you looking to build? (optional)" aria-label="Message, optional" rows="3"></textarea>
 <button type="submit" class="btn" id="lead-submit-btn">Send it over</button>
-<p id="lead-form-status" class="lead-form-status"></p>
+<p id="lead-form-status" class="lead-form-status" aria-live="polite"></p>
 </form>
 <p class="contact-meta">Prefer email? Reach us directly at <a id="t-contact_email_link" href="#"></a></p>
 <p class="contact-meta" id="t-contact_meta"></p>
@@ -481,6 +622,10 @@ pointer-events:none;
 <div class="brand-name">Clemontyne</div>
 </div>
 <p id="t-footer_text"></p>
+<div style="display:flex; gap:18px; font-size:13px;">
+<a href="privacy.html" style="color:var(--ink-soft);">Privacy Policy</a>
+<a href="terms.html" style="color:var(--ink-soft);">Terms of Service</a>
+</div>
 </div>
 </footer>
 
@@ -491,6 +636,14 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 // -----------------------------------------------------------
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const CALENDLY_URL = 'https://calendly.com/d/d3mr-mt5-xdc/clemontyne-intro-meeting';
+function openCalendly(){
+if (window.Calendly) {
+Calendly.initPopupWidget({ url: CALENDLY_URL });
+}
+return false;
+}
 
 function setText(id, value){
 const el = document.getElementById('t-' + id);
@@ -547,24 +700,6 @@ div.innerHTML = `
 <h3>${card.title || ''}</h3>
 <p>${card.body || ''}</p>
 <ul class="price-list" style="margin-top:16px;">${featuresHtml}</ul>
-`;
-container.appendChild(div);
-});
-}
-
-async function loadPricingCards(group, containerId){
-const { data, error } = await sb.from('cards').select('*').eq('group_key', group).eq('visible', true).order('sort_order');
-const container = document.getElementById(containerId);
-if(error || !container) return;
-container.innerHTML = '';
-(data || []).forEach(card => {
-const featuresHtml = (card.features || []).map(f => `<li>${f}</li>`).join('');
-const div = document.createElement('div');
-div.className = 'price-card' + (card.featured ? ' featured' : '');
-div.innerHTML = `
-<div class="price-name">${card.title || ''}</div>
-<div class="price-value">${card.amount || ''}</div>
-<ul class="price-list">${featuresHtml}</ul>
 `;
 container.appendChild(div);
 });
@@ -714,6 +849,7 @@ setModalSection('need', card.need_text);
 setModalSection('built', card.built_text || card.body);
 setModalSection('outcome', card.outcome_text);
 window._currentGallery = (card.gallery_images && card.gallery_images.length) ? card.gallery_images : (card.image_url ? [card.image_url] : []);
+window._currentGalleryTitle = card.title || 'Case study screenshot';
 renderGallery();
 document.getElementById('case-modal').classList.add('open');
 }
@@ -732,15 +868,16 @@ wrap.style.display = 'none';
 function renderGallery(){
 const gallery = document.getElementById('modal-gallery');
 const images = window._currentGallery || [];
-let inner = `<button class="modal-close" onclick="closeCaseModal()">&times;</button>`;
+const galleryTitle = window._currentGalleryTitle || 'Case study screenshot';
+let inner = `<button class="modal-close" onclick="closeCaseModal()" aria-label="Close">&times;</button>`;
 if(images.length === 0){
 inner += `<div class="empty">No screenshots yet</div>`;
 } else {
-inner += `<img src="${images[galleryIndex]}" alt="">`;
+inner += `<img src="${images[galleryIndex]}" alt="${galleryTitle} — screenshot ${galleryIndex + 1} of ${images.length}">`;
 if(images.length > 1){
 inner += `
-<button class="modal-nav prev" onclick="shiftGallery(-1)">&#8249;</button>
-<button class="modal-nav next" onclick="shiftGallery(1)">&#8250;</button>
+<button class="modal-nav prev" onclick="shiftGallery(-1)" aria-label="Previous screenshot">&#8249;</button>
+<button class="modal-nav next" onclick="shiftGallery(1)" aria-label="Next screenshot">&#8250;</button>
 <div class="modal-dots">${images.map((_,idx) => `<span class="${idx===galleryIndex?'active':''}"></span>`).join('')}</div>
 `;
 }
@@ -764,18 +901,51 @@ document.getElementById('case-modal').addEventListener('click', (e) => {
 if(e.target.id === 'case-modal') closeCaseModal();
 });
 
+// Cookie consent banner — show only if no prior decision exists
+const consent = localStorage.getItem('cookie_consent');
+const banner = document.getElementById('cookie-banner');
+if(!consent && banner){
+banner.style.display = 'block';
+}
+const acceptBtn = document.getElementById('cookie-accept');
+const declineBtn = document.getElementById('cookie-decline');
+if(acceptBtn){
+acceptBtn.addEventListener('click', () => {
+localStorage.setItem('cookie_consent', 'accepted');
+banner.style.display = 'none';
+});
+}
+if(declineBtn){
+declineBtn.addEventListener('click', () => {
+localStorage.setItem('cookie_consent', 'declined');
+window['ga-disable-G-J23TNLPLR6'] = true;
+banner.style.display = 'none';
+});
+}
+
 const leadForm = document.getElementById('lead-form');
 if(leadForm){
 leadForm.addEventListener('submit', async (e) => {
 e.preventDefault();
 const statusEl = document.getElementById('lead-form-status');
 const btn = document.getElementById('lead-submit-btn');
+
+// Honeypot check — real visitors never fill this hidden field, bots often do.
+const honeypot = document.getElementById('lead-website').value;
+if(honeypot){
+statusEl.textContent = "Got it — we'll be in touch soon.";
+statusEl.className = 'lead-form-status success';
+leadForm.reset();
+return;
+}
+
 const payload = {
 business_name: document.getElementById('lead-business').value.trim(),
 contact_name: document.getElementById('lead-name').value.trim(),
 email: document.getElementById('lead-email').value.trim(),
 phone: document.getElementById('lead-phone').value.trim(),
 preferred_contact: document.getElementById('lead-preferred').value,
+package_interest: document.getElementById('lead-package').value,
 message: document.getElementById('lead-message').value.trim(),
 source: 'website'
 };
@@ -807,7 +977,6 @@ loadSiteText(),
 loadSimpleCards('how_it_works', 'cards-how_it_works'),
 loadServiceCards(),
 loadSimpleCards('automation_types', 'cards-automation_types'),
-loadPricingCards('pricing_website', 'cards-pricing_website'),
 loadExtrasStrips(),
 loadWorkCards(),
 loadTeamCards(),
@@ -820,7 +989,7 @@ loadAll();
 <div class="modal-overlay" id="case-modal">
 <div class="modal-box">
 <div class="modal-gallery" id="modal-gallery">
-<button class="modal-close" onclick="closeCaseModal()">&times;</button>
+<button class="modal-close" onclick="closeCaseModal()" aria-label="Close">&times;</button>
 </div>
 <div class="modal-body">
 <span class="tag" id="modal-tag"></span>
@@ -840,5 +1009,27 @@ loadAll();
 </div>
 </div>
 </div>
+<div id="cookie-banner" class="cookie-banner" style="display:none;">
+<p>We use Google Analytics to understand how visitors use this site. You can accept or decline — this doesn't affect anything else about how the site works.</p>
+<div class="cookie-banner-actions">
+<button id="cookie-decline" class="btn btn-ghost">Decline</button>
+<button id="cookie-accept" class="btn">Accept</button>
+</div>
+</div>
+<script src="https://assets.calendly.com/assets/external/widget.js"></script>
+<script type="application/ld+json">
+{
+"@context": "https://schema.org",
+"@type": "ProfessionalService",
+"name": "Clemontyne & Co.",
+"url": "https://clemontyne.com",
+"logo": "https://clemontyne.com/favicon.svg",
+"image": "https://clemontyne.com/images/og-image.png",
+"description": "Custom-coded CRMs, websites, and admin tools for businesses that have outgrown spreadsheets, sticky notes, and no-code workarounds.",
+"email": "hello@clemontyne.com",
+"areaServed": "US",
+"priceRange": "$150-$5500"
+}
+</script>
 </body>
 </html>
