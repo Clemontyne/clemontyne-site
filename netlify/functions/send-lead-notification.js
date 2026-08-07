@@ -25,6 +25,7 @@ exports.handler = async (event) => {
     <p><strong>Email:</strong> ${lead.email || '—'}</p>
     <p><strong>Phone:</strong> ${lead.phone || '—'}</p>
     <p><strong>Preferred contact:</strong> ${lead.preferred_contact || '—'}</p>
+    <p><strong>Interested in:</strong> ${lead.package_interest || '—'}</p>
     <p><strong>Message:</strong><br>${(lead.message || '—').replace(/\n/g, '<br>')}</p>
   `;
 
