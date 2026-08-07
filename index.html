@@ -252,10 +252,32 @@ pointer-events:none;
 <section class="section" style="background:var(--leaf-pale); border-radius:0;">
 <div class="wrap">
 <div class="section-head">
-<div class="eyebrow" id="t-who_eyebrow"></div>
-<h2 id="t-who_title"></h2>
+<div class="eyebrow">PROBLEMS WE SOLVE</div>
+<h2>Four problems, one team to solve them.</h2>
+<p style="margin-top:12px; max-width:640px;">This is where we're starting, not where we stop. If your business runs on any of these workarounds, we can probably help — these are just the patterns we're focused on first.</p>
 </div>
-<div class="grid-3" id="cards-who_we_build_for"></div>
+<div class="grid-2">
+<div class="card">
+<span class="tag citrus">LEAD CAPTURE &amp; FOLLOW-UP</span>
+<h3>When leads fall through the cracks</h3>
+<p>No real system to capture a lead, follow up, and move them through a funnel — so people quietly disappear before they ever become a client. We see this constantly with coaches, consultants, and instructors running everything through email and spreadsheets.</p>
+</div>
+<div class="card">
+<span class="tag leaf">DAY-TO-DAY OPERATIONS</span>
+<h3>Running on memory instead of a system</h3>
+<p>Attendance, billing, and communication tracked by memory, paper, or a spreadsheet only one person understands — so nothing's connected and everything depends on someone remembering. Common for youth programs and membership-based businesses.</p>
+</div>
+<div class="card">
+<span class="tag zest">PIPELINE &amp; CLIENT TRACKING</span>
+<h3>Deals and clients living in inboxes</h3>
+<p>No real pipeline — just inboxes, sticky notes, and whoever remembers to follow up. Deals stall and client details get lost between people. Common for small agencies and local B2B service businesses.</p>
+</div>
+<div class="card">
+<span class="tag citrus">WEBSITE &amp; VISIBILITY</span>
+<h3>No front door for your business</h3>
+<p>An outdated site, one that's hard to find, or no website at all — so people searching for what you do land nowhere useful and move on to whoever shows up next. Common across almost every type of business that's grown on referrals and never needed a website until now.</p>
+</div>
+</div>
 </div>
 </section>
 
@@ -606,6 +628,23 @@ gallery_images: [
 need_text: "Before Clemontyne, Noble's Martial Arts ran entirely on spreadsheets, paper rosters, and manual emails — nothing tied attendance, belt progression, revenue, or parent communication together. Attendance data lived only inside a raw export from the city's registration system, belt progression across five class groups followed genuinely complex rules with no system enforcing them, and parents had no structured way to report an absence.",
 built_text: "A full operational CRM covering roster and attendance, belt testing and promotion tracking built around NMA's real belt-path rules, revenue and margin reporting, and class planning tools — paired with a public website handling registration, a parent hub, and absence reporting. Both run on one shared backend, so a parent's absence report on the website shows up instantly on the CRM and admin panel with no manual syncing between them.",
 outcome_text: "The system now runs what used to be entirely manual: roughly 23 CRM modules replacing spreadsheets and paper lists, and an absence-reporting flow that moved from an unstructured phone/text channel to a structured form that writes directly into attendance in real time. Brandon now estimates the system saves him 15+ hours a week compared to running things by hand. Staff can work from whichever surface is fastest in the moment — full CRM at a desk, lightweight admin panel from a phone — without reconciling data between them afterward."
+},
+{
+tag: 'CRM',
+title: "A Custom Rebook & New-Business CRM for Willowood Ventures",
+body: "A custom-coded CRM built around Willowood's rebook-and-new-business sales motion — replacing a spreadsheet-based operation spanning tens of thousands of dealer records.",
+image_url: 'images/case-studies/willowood-pipeline-board.png',
+gallery_images: [
+'images/case-studies/willowood-pipeline-board.png',
+'images/case-studies/willowood-dashboard-forecast.png',
+'images/case-studies/willowood-opportunity-detail.png',
+'images/case-studies/willowood-contact-record.png',
+'images/case-studies/willowood-email-sequences.png',
+'images/case-studies/willowood-dealer-list.png'
+],
+need_text: "Willowood Ventures runs a high-volume, event-driven sales operation — a base of tens of thousands of dealer records, recurring events, and two motions running at the same time: rebooking dealers after an event (retention) and working brand-new opportunities. Before this system, all of it lived in spreadsheets. Deal stages, follow-ups, contact details, and each dealer's past-event revenue sat in separate files with no connection between them, so there was no single view of where an opportunity stood, what the next step was, or which past-event dealers were due to be re-engaged.",
+built_text: "A custom-coded CRM built around Willowood's specific rebook-and-new-business workflow. At its core is an opportunities pipeline with defined stages — new, evaluation, negotiation, and a dedicated event-review stage for the rebook motion — where each deal carries an owner, dollar amount, win probability, forecast category, close date, a health score, and a next step with a due date, plus the dealer's prior-event revenue for context. Around that pipeline sit more than twenty linked modules: dealer and dealer-group records kept current by an automated data sync, contact records tied to each dealer, an activity log for follow-ups and tasks, multi-step automated email sequences with per-contact enrollment tracking, a pricebook with quotes and invoices, full opportunity history, an audit log, and a closed-won handoff module that captures the event details and drafts the handoff to the support team.",
+outcome_text: "This is early-stage — the honest, verifiable story here is scope and function, not a long-run performance stat. The build replaced a spreadsheet-based process with a single custom system spanning 20+ integrated modules: an automated data sync keeps a base of roughly 76,000 dealer records current without manual entry, automated multi-step email sequences run follow-up that used to be sent by hand, and structured pipeline health-scoring and revenue forecasting now exist where there was nothing before. Over the same period, Willowood grew from 22 events to 97 in a single month — the scale of operation this system was built to support."
 }
 ];
 // ---------------------------------------------------------------
@@ -737,7 +776,6 @@ btn.textContent = 'Send it over';
 async function loadAll(){
 await Promise.all([
 loadSiteText(),
-loadSimpleCards('who_we_build_for', 'cards-who_we_build_for'),
 loadSimpleCards('how_it_works', 'cards-how_it_works'),
 loadServiceCards(),
 loadSimpleCards('automation_types', 'cards-automation_types'),
